@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Launcher Minecraft Forge 1.20.1</title>
+  <style>
+    :root { --accent: #ffffff; --muted: rgba(255,255,255,0.85); }
+    html, body { height: 100%; margin: 0; }
+    body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; background: #000; color: var(--muted); overflow: hidden; }
+    #background { position: fixed; inset: 0; background-size: cover; background-position: center; filter: brightness(0.6) saturate(0.9); transition: background-image 1s ease-in-out; }
+    #overlay { position: fixed; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.7) 100%); pointer-events: none; }
+    #ui { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; }
+    header { position: absolute; top: 0; left: 0; right: 0; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; -webkit-app-region: drag; z-index: 20; }
+    #serverLogo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
+    #serverName { color: var(--accent); font-size: 20px; font-weight: 700; margin-left: 12px; }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; }
+    #center { text-align: center; }
+    #playButton {
+      width: 240px;
+      height: 80px;
+      border-radius: 12px;
+      border: none;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      color: #fff;
+      cursor: pointer;
+      -webkit-app-region: no-drag;
+
+      background:
+        radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 45%),
+        linear-gradient(90deg,#0a60ff,#2aa7ff);
+
+      box-shadow:
+        0 18px 50px rgba(10,96,255,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.28);
+
+      transform: translateY(0);
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+    }
+    #playButton:hover { transform: translateY(-3px); }
+
+    /* --------- Surprise : Glow animé + ripple premium sur PLAY --------- */
+    #playButton {
+      position: relative;
+      overflow: hidden;
+      transform: translateY(0);
+    }
+
+    /* Glowing sweep */
+    #playButton::before{
+      content:"";
+      position:absolute;
+      inset:-60% -40%;
+      background:
+        linear-gradient(120deg,
+          rgba(255,255,255,0) 35%,
+          rgba(95,176,255,0.35) 50%,
+          rgba(42,167,255,0.45) 58%,
+          rgba(255,255,255,0) 70%);
+      transform: translateX(-30%) rotate(10deg);
+      animation: playGlowSweep 2.2s ease-in-out infinite;
+      pointer-events:none;
+      mix-blend-mode: screen;
+      filter: blur(6px);
+      opacity: 0.9;
+    }
+    @keyframes playGlowSweep{
+      0%   { transform: translateX(-40%) rotate(10deg); opacity: 0.0; }
+      10%  { opacity: 0.9; }
+      50%  { transform: translateX(10%) rotate(10deg); opacity: 0.95; }
+      90%  { opacity: 0.9; }
+      100% { transform: translateX(45%) rotate(10deg); opacity: 0.0; }
+    }
+
+    /* Ripple on click */
+    #playButton::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width: 10px;
+      height: 10px;
+      transform: translate(-50%,-50%) scale(0.1);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 0 0 rgba(95,176,255,0.35);
+      opacity: 0;
+      pointer-events:none;
+    }
+
+    #playButton.play-ripple::after{
+      animation: playRipple 520ms ease-out;
+    }
+    @keyframes playRipple{
+      0% { opacity: 0.0; transform: translate(-50%,-50%) scale(0.1); box-shadow: 0 0 0 0 rgba(95,176,255,0.35); }
+      10% { opacity: 0.9; }
+      100% { opacity: 0.0; transform: translate(-50%,-50%) scale(18); box-shadow: 0 0 0 18px rgba(95,176,255,0); }
+    }
+
+    #subrow { margin-top: 18px; display:flex; gap:12px; justify-content:center; }
+    #username { padding: 10px 12px; border-radius: 6px; border: none; width: 160px; -webkit-app-region: no-drag; }
+    #memoryMax { padding: 10px 12px; border-radius: 6px; border: none; width: 100px; -webkit-app-region: no-drag; }
+    button.small { padding: 10px 14px; border-radius: 6px; background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid rgba(255,255,255,0.06); }
+    button.small, .opt-btn { -webkit-app-region: no-drag; }
+    .window-controls { display:flex; gap:10px; align-items:center; }
+    .opt-btn.small { height:34px; padding:6px 10px; border-radius:6px; }
+    h1 { position:absolute; left:-9999px; }
+    .subtitle { position: absolute; left: 48px; top: 92px; color: rgba(255,255,255,0.6); }
+    /* Modal */
+    .modal { position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.5); visibility: hidden; opacity: 0; transition: opacity 160ms ease; }
+    .modal.open { visibility: visible; opacity: 1; }
+    .modal-card { background: #071224; padding: 20px; border-radius: 10px; color: var(--muted); min-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+    .modal-card h3 { margin:0 0 12px 0; color: #fff }
+    .modal-row { display:flex; gap:8px; margin-top:8px; }
+    footer { padding: 20px 48px; display:flex; gap:20px; align-items:flex-end; }
+    #status { color: rgba(255,255,255,0.85); font-weight:600; }
+    #logOutput { margin-left: auto; color: rgba(255,255,255,0.68); max-width: 40%; height: 64px; overflow: auto; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; line-height: 1.3; }
+
+    /* Small progress bar styles */
+    #progressContainer { display:flex; align-items:center; gap:12px; width:480px; }
+    #progressStage { color: rgba(255,255,255,0.9); font-weight:700; width:160px; }
+    .progress-wrap { flex:1; height:10px; background: rgba(255,255,255,0.08); border-radius:6px; overflow:hidden; }
+    #smallProgressBar { height:100%; width:0%; background: linear-gradient(90deg,#2b6df6,#5fb0ff); transition: width 200ms linear; }
+    #progressPercent { width:64px; text-align:right; color: rgba(255,255,255,0.85); font-weight:700; }
+    .muted { color: rgba(255,255,255,0.6); }
+    #statusDot { display:inline-block; width:8px; height:8px; border-radius:50%; background: rgba(255,255,255,0.25); margin-right:10px; vertical-align:middle; box-shadow: 0 0 0 rgba(95,176,255,0); }
+
+    .status-busy #statusDot { background: rgba(95,176,255,0.7); box-shadow: 0 0 18px rgba(95,176,255,0.45); animation: pulse 1.2s ease-in-out infinite; }
+    @keyframes pulse { 0%{ transform: scale(1);} 50%{ transform: scale(1.35);} 100%{ transform: scale(1);} }
+
+    /* Tabs + views */
+    #tabs { position: absolute; top: 72px; left: 0; right: 0; z-index: 30; display: flex; justify-content: center; gap: 10px; padding: 10px 12px; }
+    .tab-btn {
+      -webkit-app-region: no-drag;
+      cursor: pointer;
+      border-radius: 999px;
+
+      /* Glass épais (plus proche Apple/iOS) */
+      border: 1px solid rgba(255,255,255,0.20);
+      background: rgba(255,255,255,0.06);
+      background-image: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04));
+
+      backdrop-filter: blur(24px) saturate(1.35);
+      -webkit-backdrop-filter: blur(24px) saturate(1.35);
+
+      color: rgba(255,255,255,0.92);
+      padding: 10px 16px;
+      font-weight: 780;
+
+      box-shadow:
+        0 12px 40px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+    .tab-btn[aria-selected="true"] { background: rgba(10,96,255,0.25); border-color: rgba(95,176,255,0.4); color: #fff; }
+
+    .view { animation: viewIn 220ms ease both; }
+
+    @keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    #playButton { transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease; }
+    #playButton:active { transform: translateY(0px) scale(0.99); }
+
+    button.small, .opt-btn {
+      transition:
+        transform 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        filter 160ms ease;
+    }
+    button.small:hover, .opt-btn:hover {
+      transform: translateY(-1.5px);
+      filter: brightness(1.05) saturate(1.1);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
+    }
+    button.small:active, .opt-btn:active {
+      transform: translateY(0px) scale(0.99);
+    }
+
+    /* App UI: inputs doux */
+    #username, #memoryMax {
+      background: rgba(0,0,0,0.12);
+      border: 1px solid rgba(255,255,255,0.10);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      color: rgba(255,255,255,0.92);
+    }
+    #username:focus, #memoryMax:focus {
+      border-color: rgba(95,176,255,0.55);
+      box-shadow: 0 0 0 4px rgba(95,176,255,0.14);
+      background: rgba(255,255,255,0.05);
+    }
+
+    #logOutputFull, #logOutput, #modsList { scrollbar-width: thin; }
+    #logOutputFull::-webkit-scrollbar, #logOutput::-webkit-scrollbar, #modsList::-webkit-scrollbar { height: 8px; width: 8px; }
+    #logOutputFull::-webkit-scrollbar-thumb, #logOutput::-webkit-scrollbar-thumb, #modsList::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 999px; }
+
+    /* Busy overlay */
+    .busy-dim { opacity: 0.85; filter: saturate(0.9); transition: opacity 140ms ease, filter 140ms ease; }
+
+    .view { display: none; }
+    .active-view { display: block; }
+
+    /* Logs view */
+    #logOutputFull { color: rgba(255,255,255,0.75); }
+    #modsList { background: rgba(0,0,0,0.18); border-radius: 10px; padding: 12px; }
+
+  </style>
+</head>
+<body>
+  <script>
+    try {
+      console.log('[LauncherUI] index loaded');
+      window.addEventListener('error', (ev) => {
+        console.error('[LauncherUI] window error:', ev.message, ev.error && ev.error.stack ? ev.error.stack : '');
+      });
+    } catch (e) {}
+  </script>
+
+
+  <h1>Domination World</h1>
+  <p class="subtitle">Le Launcheur Domination World ! Cliqué et rejoingnez le serveur</p>
+  <div id="background"></div>
+  <div id="overlay"></div>
+
+  <div id="ui">
+    <header>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img id="serverLogo" alt="Logo serveur" src="images/logo.png" />
+
+        <div id="serverName">Domination World</div>
+      </div>
+      <div class="window-controls" style="display:flex;gap:10px;align-items:center;">
+        <button id="optionsBtn" class="opt-btn small">Options</button>
+        <button id="minBtn" class="opt-btn small">—</button>
+        <button id="maxBtn" class="opt-btn small">▢</button>
+        <button id="closeBtn" class="opt-btn small">✕</button>
+      </div>
+
+      <script>
+        // Fallback UI closer (sûr) : évite un blocage si un autre handler JS empêche la fermeture.
+        window.addEventListener('DOMContentLoaded', () => {
+          const closeBtn = document.getElementById('closeBtn');
+          closeBtn?.addEventListener('click', () => {
+            try { window.launcherApi?.windowClose?.(); } catch (e) {}
+          });
+        });
+      </script>
+    </header>
+
+    <div id="tabs" role="tablist" aria-label="Navigation">
+      <button class="tab-btn" data-view="accueil" role="tab" aria-selected="true">Accueil</button>
+      <button class="tab-btn" data-view="options" role="tab" aria-selected="false">Options</button>
+      <button class="tab-btn" data-view="mods" role="tab" aria-selected="false">Mods</button>
+      <button class="tab-btn" data-view="logs" role="tab" aria-selected="false">Logs</button>
+      <button class="tab-btn" data-view="apropos" role="tab" aria-selected="false">À propos</button>
+    </div>
+
+    <main>
+      <div id="viewAccueil" class="view active-view">
+        <div id="center">
+          <button id="playButton">JOUER</button>
+          <div id="subrow" style="margin-top:14px;">
+            <button id="updateButton" class="small">Vérifier MAJ</button>
+            <div class="muted" style="max-width:520px; margin:0 auto; text-align:center;">
+              Cliquez « JOUER » : les mods se lancent auto et le nom/mémoire viennent des « Options ».
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id="viewOptions" class="view">
+        <div class="modal-card" style="width: 900px; max-width: calc(100vw - 80px); margin: 20px auto 0;">
+          <h3>Options</h3>
+
+          <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;">
+
+            <div style="flex:1;min-width:320px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                <label style="margin:0;">Profils</label>
+                <div style="display:flex;gap:8px;">
+                  <select id="optProfileSelect" style="padding:8px;border-radius:6px;border:none;background: rgba(255,255,255,0.03); color: var(--muted);max-width:240px;" ></select>
+                  <input id="optProfileName" type="text" placeholder="Nouveau profil" style="width:160px;padding:8px;border-radius:6px;border:none;background: rgba(255,255,255,0.03); color: var(--muted);" />
+                  <button id="optProfileCreate" class="small">Créer</button>
+                </div>
+              </div>
+
+              <div class="modal-row" style="margin-top:10px;">
+                <label style="flex:1;">Nom d'utilisateur</label>
+              </div>
+              <div class="modal-row"><input id="optUsername" style="flex:1;padding:8px;border-radius:6px;border:none;background: rgba(255,255,255,0.03); color: var(--muted);" /></div>
+
+              <label style="margin-top:8px;display:block;">Mémoire (min/max, ex: 2G / 6G)</label>
+              <div class="modal-row" style="display:flex;gap:10px;">
+                <input id="optMemoryMin" placeholder="Min (ex: 2G)" style="flex:1;padding:8px;border-radius:6px;border:none;background: rgba(255,255,255,0.03); color: var(--muted);" />
+                <input id="optMemoryMax" placeholder="Max (ex: 4G)" style="flex:1;padding:8px;border-radius:6px;border:none;background: rgba(255,255,255,0.03); color: var(--muted);" />
+              </div>
+
+              <div style="margin-top:10px;">
+                <div style="display:flex;gap:10px;align-items:flex-end;">
+                  <div style="flex:1;">
+                    <label style="display:block;">Validation mémoire</label>
+                    <div id="optMemoryValidation" class="muted" style="font-size:13px;margin-top:6px;min-height:18px;">—</div>
+                  </div>
+                  <button id="optApplyMemory" class="small">Appliquer</button>
+                </div>
+              </div>
+
+              <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
+                <button id="optSave" class="small">Enregistrer profil</button>
+                <button id="optResetDefaults" class="small">Reset (defaults)</button>
+              </div>
+            </div>
+
+            <div style="flex:1;min-width:320px;">
+              <label style="display:block;margin-top:10px;">Java path</label>
+              <div class="modal-row"><input id="optJavaPath" placeholder="Ex: javaw (Windows) ou java" style="flex:1;padding:8px;border-radius:6px;border:none;background: rgba(255,255,255,0.03); color: var(--muted);" /></div>
+
+              <label style="margin-top:8px;display:block;">Dossier de lancement</label>
+              <div class="modal-row"><input id="optLaunchDir" placeholder="(auto)" style="flex:1;padding:8px;border-radius:6px;border:none;background: rgba(255,255,255,0.03); color: var(--muted);" /></div>
+
+              <div style="margin-top:14px;" class="muted">
+                Note: le launcher Electron utilise `launcher-root` côté main.js. Ces champs servent à stocker vos préférences.
+              </div>
+
+              <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
+                <button id="optCancel" class="small">Annuler</button>
+                <button id="optApply" class="small">Appliquer à l'écran</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="viewMods" class="view">
+        <div class="modal-card" style="width: 720px; max-width: calc(100vw - 80px); margin: 20px auto 0;">
+          <h3>Mods</h3>
+          <div id="modsStatus" style="color: rgba(255,255,255,0.75); margin-bottom: 10px;">Liste des mods (refresh via “Installer mods”).</div>
+          <button id="refreshMods" class="small">Refresh état</button>
+          <pre id="modsList" style="margin-top: 12px; max-height: 300px; overflow:auto; color: rgba(255,255,255,0.65);"></pre>
+        </div>
+      </div>
+
+      <div id="viewLogs" class="view">
+        <div class="modal-card" style="width: 720px; max-width: calc(100vw - 80px); margin: 20px auto 0;">
+          <h3>Logs</h3>
+          <div style="display:flex; justify-content: flex-end; gap:8px; margin-top: -6px;">
+            <button id="clearLogs" class="small">Clear</button>
+          </div>
+          <pre id="logOutputFull" style="margin-top: 12px; max-height: 320px; overflow:auto;"></pre>
+        </div>
+      </div>
+
+      <div id="viewApropos" class="view">
+        <div class="modal-card" style="width: 720px; max-width: calc(100vw - 80px); margin: 20px auto 0;">
+          <h3>À propos</h3>
+          <div class="muted">Launcher Forge 1.20.1 — interface améliorée.</div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div id="status" class="status-busy"><span id="statusDot"></span>Prêt à jouer sur Domination World.</div>
+
+      <div id="progressContainer">
+        <div id="progressStage">Prêt</div>
+        <div class="progress-wrap"><div id="smallProgressBar"></div></div>
+        <div id="progressPercent">0%</div>
+      </div>
+      <pre id="logOutput"></pre>
+    </footer>
+  </div>
+
+  <script>
+    // Ripple client-side (UI uniquement)
+    window.addEventListener('DOMContentLoaded', () => {
+      const b = document.getElementById('playButton');
+      if (!b) return;
+      b.addEventListener('click', () => {
+        b.classList.remove('play-ripple');
+        // Reflow pour relancer l’animation
+        // eslint-disable-next-line no-unused-expressions
+        b.offsetHeight;
+        b.classList.add('play-ripple');
+        setTimeout(() => b.classList.remove('play-ripple'), 650);
+      });
+    });
+  </script>
+  <style>
+    /* Better animations for all main buttons / tabs */
+    button.small,
+    .opt-btn,
+    .tab-btn,
+    #playButton {
+      will-change: transform, filter;
+    }
+
+    .btn-anim {
+      position: relative;
+      isolation: isolate;
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    /* Hover lift (plus agressif) */
+    button.small.btn-anim:hover,
+    .opt-btn.btn-anim:hover,
+    .tab-btn.btn-anim:hover,
+    #playButton.btn-anim:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.12) saturate(1.18);
+      box-shadow:
+        0 24px 70px rgba(10,96,255,0.30),
+        0 10px 30px rgba(95,176,255,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+
+
+    /* Press */
+    button.small.btn-anim:active,
+    .opt-btn.btn-anim:active,
+    .tab-btn.btn-anim:active,
+    #playButton.btn-anim:active {
+      transform: translateY(0px) scale(0.99);
+      filter: brightness(0.98) saturate(1.02);
+    }
+
+    /* Subtle shimmer */
+.btn-anim::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: linear-gradient(120deg,
+        rgba(255,255,255,0) 28%,
+        rgba(95,176,255,0.24) 44%,
+        rgba(42,167,255,0.35) 54%,
+        rgba(255,255,255,0) 70%
+      );
+      transform: translateX(-70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 380ms ease;
+      z-index: -1;
+      filter: blur(0.2px);
+    }
+
+    /* On hover: shimmer + stronger glow */
+    button.small.btn-anim:hover::before,
+    .opt-btn.btn-anim:hover::before,
+    .tab-btn.btn-anim:hover::before,
+    #playButton.btn-anim:hover::before {
+      opacity: 1;
+      transform: translateX(28%);
+    }
+
+    /* Small glow dot */
+    .btn-anim::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      transform: translate(-50%, -50%) scale(0.2);
+      border-radius: 999px;
+      background: rgba(95,176,255,0.35);
+      box-shadow: 0 0 0 0 rgba(95,176,255,0.30);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 140ms ease;
+      z-index: -1;
+    }
+
+    button.small.btn-anim:hover::after,
+    .opt-btn.btn-anim:hover::after,
+    .tab-btn.btn-anim:hover::after,
+    #playButton.btn-anim:hover::after {
+      opacity: 1;
+      animation: btnHoverDot 900ms ease-out infinite;
+    }
+
+    @keyframes btnHoverDot {
+      0% { transform: translate(-50%, -50%) scale(0.25); box-shadow: 0 0 0 0 rgba(95,176,255,0.22); }
+      45% { transform: translate(-50%, -50%) scale(0.55); box-shadow: 0 0 18px 8px rgba(95,176,255,0.18); }
+      100% { transform: translate(-50%, -50%) scale(0.25); box-shadow: 0 0 0 0 rgba(95,176,255,0); }
+    }
+
+
+    /* Loading / busy pulse */
+    .busy-pulse {
+      animation: busyPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes busyPulse {
+      0% { transform: translateY(0) scale(1); box-shadow: 0 18px 52px rgba(10,96,255,0.18); }
+      50% { transform: translateY(-1px) scale(1.01); box-shadow: 0 26px 70px rgba(95,176,255,0.25); }
+      100% { transform: translateY(0) scale(1); box-shadow: 0 18px 52px rgba(10,96,255,0.18); }
+    }
+  </style>
+
+  <script>
+    // Attach animation classes once DOM is ready
+    window.addEventListener('DOMContentLoaded', () => {
+      const candidates = [
+        '#playButton',
+        'button.small',
+        '.opt-btn',
+        '.tab-btn'
+      ];
+
+      const nodes = [];
+      for (const sel of candidates) {
+        document.querySelectorAll(sel).forEach((n) => nodes.push(n));
+      }
+
+      nodes.forEach((n) => {
+        n.classList.add('btn-anim');
+        // Ensure border-radius inheritance for pseudo element
+        const cs = window.getComputedStyle(n);
+        if (!n.style.borderRadius && cs.borderRadius) n.style.borderRadius = cs.borderRadius;
+      });
+    });
+  </script>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
+
+

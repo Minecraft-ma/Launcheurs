@@ -1,0 +1,12 @@
+{
+  "version": "2026-06-14T00:00:00.000Z",
+  "mods": [
+    {
+      "name": "modexample.jar",
+      "version": "1.0.0",
+      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/modexample.jar",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size": 1024000
+    }
+  ]
+}

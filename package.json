@@ -1,0 +1,50 @@
+{
+  "name": "minecraft-forge-launcher",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --publish never",
+    "dist": "electron-builder --win --publish always"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.0",
+    "minecraft-launcher-core": "^3.18.2"
+  },
+  "devDependencies": {
+    "electron": "^26.0.0",
+    "electron-builder": "^24.13.0"
+  },
+  "build": {
+    "appId": "fr.minecraft.ma.launcher",
+    "productName": "Launcheurs 1.20.1",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!**/.git/**",
+      "!**/node_modules/**/{CHANGELOG.md,README.md,readme.md,readme}",
+      "!**/*.map"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "${productName}-setup-${version}.${ext}"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Minecraft-ma",
+      "repo": "Launcheurs"
+    }
+  }
+}
