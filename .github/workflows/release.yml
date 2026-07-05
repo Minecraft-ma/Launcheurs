@@ -1,4 +1,4 @@
-name: Build and publish launcher
+name: Build and upload launcher artifacts
 
 on:
   push:
@@ -26,9 +26,8 @@ jobs:
         run: npm ci
 
       - name: Build installer
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run dist
+        run: npm run build
+
       - name: Upload dist artifacts
         uses: actions/upload-artifact@v4
         with:
