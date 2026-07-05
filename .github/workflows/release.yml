@@ -29,3 +29,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run dist
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-dist
+          path: dist/**
