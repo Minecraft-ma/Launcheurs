@@ -2,6 +2,8 @@ name: Build and publish launcher
 
 on:
   push:
+    branches:
+      - 'Launcheurs'
     tags:
       - 'v*'
   workflow_dispatch:
