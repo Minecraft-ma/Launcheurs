@@ -1,535 +1,535 @@
 {
-  "version": "2026-08-12T01:51:15.272Z",
+  "version": "2026-08-12T01:53:52.208Z",
   "mods": [
     {
       "name": "AdvancedPeripherals-1.20.1-0.7.48r.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/AdvancedPeripherals-1.20.1-0.7.48r.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/AdvancedPeripherals-1.20.1-0.7.48r.jar",
       "sha256": "664a94fe47d2e9a7e94bc204c1c546617f4aa4b6787d24bcf5694c19f5c2d2bc",
       "size": 885438
     },
     {
       "name": "AEInfinityBooster-1.20.1-1.0.0+51.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/AEInfinityBooster-1.20.1-1.0.0+51.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/AEInfinityBooster-1.20.1-1.0.0+51.jar",
       "sha256": "2c9c293f861d859427eaa72b4c2f8856c9f07bd1f6e898e9c36e1c411d02e988",
       "size": 25924
     },
     {
       "name": "almostunified-forge-1.20.1-0.11.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/almostunified-forge-1.20.1-0.11.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/almostunified-forge-1.20.1-0.11.0.jar",
       "sha256": "2ce69432abd105aa9e8627d3294dacb747331d73b07725cd30650ad78eae00bb",
       "size": 218740
     },
     {
       "name": "appliedenergistics2-forge-15.4.10.jar",
       "version": "2",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/appliedenergistics2-forge-15.4.10.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/appliedenergistics2-forge-15.4.10.jar",
       "sha256": "fbfee05c6674cb6b00fe425e945ca4818d41eb34069b60dcb4a36221a0390fcc",
       "size": 8495956
     },
     {
       "name": "architectury-9.2.14-forge.jar",
       "version": "9.2.14",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/architectury-9.2.14-forge.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/architectury-9.2.14-forge.jar",
       "sha256": "218b471d0b8a1f6cda14cfc1beb9eeb0df54304500acc6c5613d9b88ec65d9af",
       "size": 580602
     },
     {
       "name": "athena-forge-1.20.1-3.1.2.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/athena-forge-1.20.1-3.1.2.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/athena-forge-1.20.1-3.1.2.jar",
       "sha256": "64eec9cffb8847a459536096ac396b135ffb07c7d9d13c6a47d9cd7b251276ab",
       "size": 91808
     },
     {
       "name": "brimm-2.0.3.jar",
       "version": "2.0.3.",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/brimm-2.0.3.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/brimm-2.0.3.jar",
       "sha256": "d5532f27710a3dc271b53a10d33e5238ca97ab8c9e6b077b34c30409d166eca9",
       "size": 4503392
     },
     {
       "name": "cc-tweaked-1.20.1-forge-1.120.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/cc-tweaked-1.20.1-forge-1.120.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/cc-tweaked-1.20.1-forge-1.120.0.jar",
       "sha256": "f3cde5a1aa20ca6ace802fed8250920d73c000e32a392f887b02315dfc678e90",
       "size": 3096410
     },
     {
       "name": "chipped-forge-1.20.1-3.0.7.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/chipped-forge-1.20.1-3.0.7.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/chipped-forge-1.20.1-3.0.7.jar",
       "sha256": "300e02535342b710fb34409821de9d097b0d8b17f56a57a17d75d05c4c1c5b63",
       "size": 15060263
     },
     {
       "name": "compactmekanismmachines-0.1.9.jar",
       "version": "0.1.9.",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/compactmekanismmachines-0.1.9.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/compactmekanismmachines-0.1.9.jar",
       "sha256": "3fe5c2580c85415d4ede917504584a34e1493e1ecaf402f9736e211ee67f9ff4",
       "size": 196184
     },
     {
       "name": "connectivity-1.20.1-7.6.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/connectivity-1.20.1-7.6.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/connectivity-1.20.1-7.6.jar",
       "sha256": "fbfa83da5a6f5717d34068af5283ebbb9f9a2474482bc818f588cd1bdbc11acd",
       "size": 120598
     },
     {
       "name": "cupboard-1.20.1-3.7.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/cupboard-1.20.1-3.7.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/cupboard-1.20.1-3.7.jar",
       "sha256": "7c6069d42e3693dc4f80d06632f008fffe6f2507902dfca6c02bf035776ccaf3",
       "size": 31643
     },
     {
       "name": "dawnoftimebuilder-forge-1.20.1-1.5.51.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/dawnoftimebuilder-forge-1.20.1-1.5.51.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/dawnoftimebuilder-forge-1.20.1-1.5.51.jar",
       "sha256": "abfec303a0bd69e66ce91d5bc24de3a164288d3320e22f69a9d08109d867d0bc",
       "size": 3213226
     },
     {
       "name": "dotbv-forge-1.20.1-0.1.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/dotbv-forge-1.20.1-0.1.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/dotbv-forge-1.20.1-0.1.0.jar",
       "sha256": "1b62cea1d297fd8a9f902fcca1da317488ec8eafeb4d3379d41d8bfc66161a1d",
       "size": 1308699
     },
     {
       "name": "DynamicTrees-1.20.1-1.4.10.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/DynamicTrees-1.20.1-1.4.10.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/DynamicTrees-1.20.1-1.4.10.jar",
       "sha256": "3d5c1052bbf8a72e2087174039b530201c4ee9657b0391f2e1b130c85afd855f",
       "size": 3754640
     },
     {
       "name": "effortlessbuilding-1.20.1-3.11.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/effortlessbuilding-1.20.1-3.11.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/effortlessbuilding-1.20.1-3.11.jar",
       "sha256": "c40ee9a5b49fb4721e6e6a629d6236a640b6da76f95e3f636c77db8f2eb92dc2",
       "size": 2326090
     },
     {
       "name": "embeddium-0.3.31+mc1.20.1.jar",
       "version": "0.3.31",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/embeddium-0.3.31+mc1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/embeddium-0.3.31+mc1.20.1.jar",
       "sha256": "eed3d1325f2acc2fd4e69bb495e5ccb91d962126ac5330f0582ebc2a3daf47fb",
       "size": 1320675
     },
     {
       "name": "embellishcraft-1.20.1-7.0.0.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/embellishcraft-1.20.1-7.0.0.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/embellishcraft-1.20.1-7.0.0.0.jar",
       "sha256": "e509691641f108c3f6e78c89834a21db54d3c86c415af791312914984c890dd7",
       "size": 5220125
     },
     {
       "name": "emi-1.1.22+1.20.1+forge.jar",
       "version": "1.1.22",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/emi-1.1.22+1.20.1+forge.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/emi-1.1.22+1.20.1+forge.jar",
       "sha256": "877a2831c44ab7a0e1f8da0df92125b42f93c6f9b9e4dd1ceb566d8adc67950a",
       "size": 1048567
     },
     {
       "name": "entityculling-forge-1.10.2-mc1.20.1.jar",
       "version": "1.10.2",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/entityculling-forge-1.10.2-mc1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/entityculling-forge-1.10.2-mc1.20.1.jar",
       "sha256": "34da8e10cf31ade2b86b02e4f55c4d3b480a0992148ac12f9ec49eb7be4bfda0",
       "size": 1587585
     },
     {
       "name": "ExtendedAE-1.20-1.4.11-forge.jar",
       "version": "1.20",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/ExtendedAE-1.20-1.4.11-forge.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/ExtendedAE-1.20-1.4.11-forge.jar",
       "sha256": "7ca54d823518c1570e885918798cbd42bc93c8f137644da4bce554b26421c83a",
       "size": 2810056
     },
     {
       "name": "fancymenu_forge_3.8.1_MC_1.20.1.jar",
       "version": "3.8.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/fancymenu_forge_3.8.1_MC_1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/fancymenu_forge_3.8.1_MC_1.20.1.jar",
       "sha256": "ba1ddf0f61def8ea87e7757ebb45f1390e1da0f7ebce1aff299b0a169b045858",
       "size": 4472193
     },
     {
       "name": "FarmersDelight-1.20.1-1.2.10.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/FarmersDelight-1.20.1-1.2.10.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/FarmersDelight-1.20.1-1.2.10.jar",
       "sha256": "32404e9bf43fb8b8b1602e7d561a3831117d6b167c2b77b82dfb1515d08744f0",
       "size": 2955928
     },
     {
       "name": "ferritecore-6.0.1-forge.jar",
       "version": "6.0.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/ferritecore-6.0.1-forge.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/ferritecore-6.0.1-forge.jar",
       "sha256": "9c2c9396a49e796d88497758caa4637d2bcbb433c318e2dd9cebcffbaf0f6c54",
       "size": 123034
     },
     {
       "name": "FluxNetworks-1.20.1-7.2.1.15.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/FluxNetworks-1.20.1-7.2.1.15.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/FluxNetworks-1.20.1-7.2.1.15.jar",
       "sha256": "8d24f39b6e1b2d83426a28a62ae0b65294b7e6e925e39a26b62f8ae077f54a89",
       "size": 515573
     },
     {
       "name": "framework-forge-1.20.1-0.8.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/framework-forge-1.20.1-0.8.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/framework-forge-1.20.1-0.8.0.jar",
       "sha256": "37c267f46d8b8dfa81bae8c9fa9fa6467e456cadecae10722ee91b43437f25a0",
       "size": 383868
     },
     {
       "name": "fusion-1.2.12-forge-mc1.20.1.jar",
       "version": "1.2.12",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/fusion-1.2.12-forge-mc1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/fusion-1.2.12-forge-mc1.20.1.jar",
       "sha256": "5cb039922e08ae6b8705d50e484a8759579025fb4f48413fa62d2056505fb45e",
       "size": 544586
     },
     {
       "name": "geckolib-forge-1.20.1-4.8.3.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/geckolib-forge-1.20.1-4.8.3.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/geckolib-forge-1.20.1-4.8.3.jar",
       "sha256": "8b90e11871a58b63816e99c529e6c932bc88e6beb3fec97ad618e22217df3250",
       "size": 1039046
     },
     {
       "name": "Glodium-1.20-1.5-forge.jar",
       "version": "1.20",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/Glodium-1.20-1.5-forge.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Glodium-1.20-1.5-forge.jar",
       "sha256": "fc419cb5bf511750c0a2da498b925f5122ac4f78617aca6630fe80abf0b6f460",
       "size": 60550
     },
     {
       "name": "guideme-20.1.14.jar",
       "version": "20.1.14.",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/guideme-20.1.14.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/guideme-20.1.14.jar",
       "sha256": "a0ba5a0288dab6e413f1456de8dd162f9479146ee681569837f6d6b17930a0e2",
       "size": 9413204
     },
     {
       "name": "IAV-1.1.11-1.20.1.jar",
       "version": "1.1.11",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/IAV-1.1.11-1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/IAV-1.1.11-1.20.1.jar",
       "sha256": "a8d3883d384db4ce637547e314de7da6d58408bb05f1d25e5abf24a4a388d8ab",
       "size": 49393551
     },
     {
       "name": "Immersive Vehicles-1.20.1-23.0.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/Immersive Vehicles-1.20.1-23.0.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Immersive Vehicles-1.20.1-23.0.0.jar",
       "sha256": "c8370f60c61b58ca7ce01d0e90161ff26665118baceca8c8f71f644d91f96417",
       "size": 6224428
     },
     {
       "name": "ImmersiveEngineering-1.20.1-10.1.0-171.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/ImmersiveEngineering-1.20.1-10.1.0-171.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/ImmersiveEngineering-1.20.1-10.1.0-171.jar",
       "sha256": "bbb04345b8263b1de026521500e28ceba207470e0dd78c9f022331d7fbca42d2",
       "size": 12123365
     },
     {
       "name": "immersivefixes-1.0.4-all.jar",
       "version": "1.0.4",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/immersivefixes-1.0.4-all.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/immersivefixes-1.0.4-all.jar",
       "sha256": "44ec64d5ca82598da04ac21f839801f349883de2ece7cc1a6281a55b03f5b27f",
       "size": 647674
     },
     {
       "name": "Jade-1.20.1-Forge-11.13.2.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/Jade-1.20.1-Forge-11.13.2.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Jade-1.20.1-Forge-11.13.2.jar",
       "sha256": "31949971a7a8d5a5bc95ad9d400cbedfd2d65ffbfb3cea7c0b2fa3b47431a0a5",
       "size": 552486
     },
     {
       "name": "jei-1.20.1-forge-15.20.0.130.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/jei-1.20.1-forge-15.20.0.130.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/jei-1.20.1-forge-15.20.0.130.jar",
       "sha256": "36d3dfb2214b9dca38c447fd971dd2dedc5f69719a5aca6ffcef69b2840ece0a",
       "size": 1409705
     },
     {
       "name": "journeymap-1.20.1-5.10.3-forge.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/journeymap-1.20.1-5.10.3-forge.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/journeymap-1.20.1-5.10.3-forge.jar",
       "sha256": "8b2679b7b4881e0aa430fd24345ea446de919faf8a45bd2a71d37c7e8ff6ae1e",
       "size": 7160405
     },
     {
       "name": "kaleidoscopetavern-1.1.2-forge+mc1.20.1.jar",
       "version": "1.1.2",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/kaleidoscopetavern-1.1.2-forge+mc1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/kaleidoscopetavern-1.1.2-forge+mc1.20.1.jar",
       "sha256": "444fe8dd53ce289fc0f01eeebcbfe2d3e3d86b52690ae3cebe6e7c2906602cf2",
       "size": 1157339
     },
     {
       "name": "konkrete_forge_1.8.0_MC_1.20-1.20.1.jar",
       "version": "1.8.0",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/konkrete_forge_1.8.0_MC_1.20-1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/konkrete_forge_1.8.0_MC_1.20-1.20.1.jar",
       "sha256": "e78686b92c3761ec26eb9d3c53efdd3d6ca77981cbd3723995e1163b7103ae0b",
       "size": 625185
     },
     {
       "name": "letsdo-vinery-forge-1.4.41.jar",
       "version": "1.4.41.",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/letsdo-vinery-forge-1.4.41.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/letsdo-vinery-forge-1.4.41.jar",
       "sha256": "5d7e11f6e2218562ce75d60788fdcfc9ccf59e4532757c18bf37759d5fc739ee",
       "size": 2041283
     },
     {
       "name": "lithostitched-forge-1.20.1-1.4.11.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/lithostitched-forge-1.20.1-1.4.11.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/lithostitched-forge-1.20.1-1.4.11.jar",
       "sha256": "c19a5a36c0e6cb3782cf7ca5b9648fb1bce5fc41fd737bed423a1f4971bccf75",
       "size": 476347
     },
     {
       "name": "Mantle-1.20.1-1.11.104.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/Mantle-1.20.1-1.11.104.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Mantle-1.20.1-1.11.104.jar",
       "sha256": "6052e47c3981064bd5213728eaa3c5418289f6f85b07a1cd4dd1505239248838",
       "size": 1625005
     },
     {
       "name": "mapperbase-1.20.1-6.0.0.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/mapperbase-1.20.1-6.0.0.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/mapperbase-1.20.1-6.0.0.0.jar",
       "sha256": "647c7f7b5facb000f1a3352ed3fe68059aad5ae1d8385f31871c29eb81f9d480",
       "size": 166269
     },
     {
       "name": "mcw-furniture-3.4.1-mc1.20.1forge.jar",
       "version": "3.4.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/mcw-furniture-3.4.1-mc1.20.1forge.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/mcw-furniture-3.4.1-mc1.20.1forge.jar",
       "sha256": "9f068315ac5ae7c4b76a6ac0679cde9be59d5cbf37488a477f13b95fe1cbc37d",
       "size": 2174615
     },
     {
       "name": "Mekanism-1.20.1-10.4.16.80.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/Mekanism-1.20.1-10.4.16.80.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Mekanism-1.20.1-10.4.16.80.jar",
       "sha256": "3b0d191fa4a45e662f9725991d76a30192f30186abb2ba694b873b5f7b9358d2",
       "size": 12558456
     },
     {
       "name": "Mekanism-MoreSolarPanels-1.20.1-1.5.9.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/Mekanism-MoreSolarPanels-1.20.1-1.5.9.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Mekanism-MoreSolarPanels-1.20.1-1.5.9.jar",
       "sha256": "f91269e97dd0ee3b9bbbfcda742309681062e447d9d1421db533423ca2d83c86",
       "size": 139240
     },
     {
       "name": "MekanismGenerators-1.20.1-10.4.16.80.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/MekanismGenerators-1.20.1-10.4.16.80.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/MekanismGenerators-1.20.1-10.4.16.80.jar",
       "sha256": "be2d5b8553f8638cfabf491002f95cef6acef210f627addb391f5af713502512",
       "size": 1054586
     },
     {
       "name": "melody_forge_1.0.3_MC_1.20.1-1.20.4.jar",
       "version": "1.0.3",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/melody_forge_1.0.3_MC_1.20.1-1.20.4.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/melody_forge_1.0.3_MC_1.20.1-1.20.4.jar",
       "sha256": "933e2a7e79c4594f965f7f7d00b1f28a98ec2a180ad8f9f90310a266fe5cf5d8",
       "size": 37178
     },
     {
       "name": "mining_dimension-1.20.1-1.0.4.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/mining_dimension-1.20.1-1.0.4.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/mining_dimension-1.20.1-1.0.4.jar",
       "sha256": "96af40c3bcc06b03bd79535bca591d87324a5eae87f4310cecefe17e060158b2",
       "size": 151764
     },
     {
       "name": "modernfix-forge-5.27.40+mc1.20.1.jar",
       "version": "5.27.40",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/modernfix-forge-5.27.40+mc1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/modernfix-forge-5.27.40+mc1.20.1.jar",
       "sha256": "0061a53c0335693318073788c57c5288f5b8b5b3918c7561f5fb7860a394611f",
       "size": 970410
     },
     {
       "name": "ModernUI-Forge-1.20.1-3.12.0.1-universal.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/ModernUI-Forge-1.20.1-3.12.0.1-universal.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/ModernUI-Forge-1.20.1-3.12.0.1-universal.jar",
       "sha256": "49fea599522316ef7abd8897e8bcad3ed742d935f0a53726eba1f00c9ca8fe4c",
       "size": 25104473
     },
     {
       "name": "MTS Official Pack-1.20.1-V29.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/MTS Official Pack-1.20.1-V29.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/MTS Official Pack-1.20.1-V29.jar",
       "sha256": "a6ca5d37a89fd398cafd96fc8f87673cec5b0247c1651bc0b9f02b23f86c7908",
       "size": 70997298
     },
     {
       "name": "NoChatRestrictions-Forge-MC1.20.1-v1.0.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/NoChatRestrictions-Forge-MC1.20.1-v1.0.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/NoChatRestrictions-Forge-MC1.20.1-v1.0.0.jar",
       "sha256": "98c335dc6850b4a0b1ddd7b8dea2712075333044aa60a84d787ee0d8babc360e",
       "size": 9676
     },
     {
       "name": "OAmP-1.20.1-V3.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/OAmP-1.20.1-V3.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/OAmP-1.20.1-V3.jar",
       "sha256": "cd7791049191317f332f8b8b2dc89ae77eb733d0921fcf1b521f56907293073d",
       "size": 24285160
     },
     {
       "name": "oculus-mc1.20.1-1.8.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/oculus-mc1.20.1-1.8.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/oculus-mc1.20.1-1.8.0.jar",
       "sha256": "0945df0cba0f62b3901dd80c3268e5311b770ece78c78037a45db12ac0425fef",
       "size": 2851119
     },
     {
       "name": "pipez-1.20.1-1.2.5.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/pipez-1.20.1-1.2.5.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/pipez-1.20.1-1.2.5.jar",
       "sha256": "46211966d3d690e4cff228d48d6a1282d3eeeb2ced46930937c274ab2fc47312",
       "size": 423184
     },
     {
       "name": "pointblank-forge-1.20.1-1.11.1.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/pointblank-forge-1.20.1-1.11.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/pointblank-forge-1.20.1-1.11.1.jar",
       "sha256": "df6f6f1773c62e8fdfe6f15e4be87c44dbbbb26335b9c6153482ca1b81ac4f61",
       "size": 17452885
     },
     {
       "name": "PWIC-0.2.4-beta_fixed.jar",
       "version": "0.2.4",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/PWIC-0.2.4-beta_fixed.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/PWIC-0.2.4-beta_fixed.jar",
       "sha256": "be4563d336fe873c1cea220de828a66fca70e02083cfb17c1cf9891678c7a748",
       "size": 29224138
     },
     {
       "name": "radium-mc1.20.1-0.12.4+git.26c9d8e.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/radium-mc1.20.1-0.12.4+git.26c9d8e.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/radium-mc1.20.1-0.12.4+git.26c9d8e.jar",
       "sha256": "b42584e2672d6b5329959ec2b0f342395b19389fed0ee4d86ea71072f42f77a0",
       "size": 713454
     },
     {
       "name": "rechiseled-1.2.4-forge-mc1.20.1.jar",
       "version": "1.2.4",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/rechiseled-1.2.4-forge-mc1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/rechiseled-1.2.4-forge-mc1.20.1.jar",
       "sha256": "e27f19cac5c6a1946d71bffdd5ac88a32f63de209dcba9619069a3c1ff0dd079",
       "size": 11860511
     },
     {
       "name": "rechiseled_chipped-2.0-1.20.1.jar",
       "version": "2.0",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/rechiseled_chipped-2.0-1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/rechiseled_chipped-2.0-1.20.1.jar",
       "sha256": "6f742ee5d0aa4df3a416ceee3d2bb16e669d829a481cb394789f438536ae540a",
       "size": 182898
     },
     {
       "name": "refurbished_furniture-forge-1.20.1-1.0.20.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/refurbished_furniture-forge-1.20.1-1.0.20.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/refurbished_furniture-forge-1.20.1-1.0.20.jar",
       "sha256": "480546202aa21fa07e6b1571f3e3263e5690e9804afb7c35984642bcf473bc6e",
       "size": 6689588
     },
     {
       "name": "resourcefulconfig-forge-1.20.1-2.1.3.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/resourcefulconfig-forge-1.20.1-2.1.3.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/resourcefulconfig-forge-1.20.1-2.1.3.jar",
       "sha256": "c404b9e5cf8595427a72d4ca6ee5730289168762b463f169be3ae5dfe3727ded",
       "size": 136923
     },
     {
       "name": "resourcefullib-forge-1.20.1-2.1.29.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/resourcefullib-forge-1.20.1-2.1.29.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/resourcefullib-forge-1.20.1-2.1.29.jar",
       "sha256": "b13afb95231d88e1caea5a045967e0fc291b29020b0d26ad39e6f9e9a551fee8",
       "size": 432753
     },
     {
       "name": "servercore-forge-1.5.2+1.20.1.jar",
       "version": "1.5.2",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/servercore-forge-1.5.2+1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/servercore-forge-1.5.2+1.20.1.jar",
       "sha256": "d9ad4f456b6c36bac17a71cd12935fdccae69ca1e1fcd33857210758cb58e586",
       "size": 1508496
     },
     {
       "name": "simplylight-1.20.1-1.4.6-build.50.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/simplylight-1.20.1-1.4.6-build.50.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/simplylight-1.20.1-1.4.6-build.50.jar",
       "sha256": "893c67fb4bbafee6e3208ba34bf60e2d6f17f4f9efdb6d1f12baa4052d8ddd10",
       "size": 555625
     },
     {
       "name": "sophisticatedbackpacks-1.20.1-3.24.43.1789.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/sophisticatedbackpacks-1.20.1-3.24.43.1789.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/sophisticatedbackpacks-1.20.1-3.24.43.1789.jar",
       "sha256": "fb516ea37e837ea6539308b4bcfaafe2328f259c453e88b9de5ed3f506183aec",
       "size": 1052185
     },
     {
       "name": "sophisticatedcore-1.20.1-1.3.37.1868.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/sophisticatedcore-1.20.1-1.3.37.1868.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/sophisticatedcore-1.20.1-1.3.37.1868.jar",
       "sha256": "91e3634ee6e6d46d21ec19bf1a8cacc857451ddea70daaad607c65d6316a4b62",
       "size": 1564709
     },
     {
       "name": "supermartijn642configlib-1.1.8-forge-mc1.20.jar",
       "version": "642",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/supermartijn642configlib-1.1.8-forge-mc1.20.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/supermartijn642configlib-1.1.8-forge-mc1.20.jar",
       "sha256": "bea425ef7e9cd27a7fc0f4b89e00cbd0a1ee050f071ecaa9f28f7238f400f0a3",
       "size": 206584
     },
     {
       "name": "supermartijn642corelib-1.1.21-forge-mc1.20.1.jar",
       "version": "642",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/supermartijn642corelib-1.1.21-forge-mc1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/supermartijn642corelib-1.1.21-forge-mc1.20.1.jar",
       "sha256": "6e4f3664aaa5f4138a43acb246c0d91672372acb78a02b89a0531c11596f2c1c",
       "size": 554977
     },
     {
       "name": "TConstruct-1.20.1-3.11.2.166.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/TConstruct-1.20.1-3.11.2.166.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/TConstruct-1.20.1-3.11.2.166.jar",
       "sha256": "653b49d73481a1325ba78adc7273dee6c765a51bafdf264a7510576d6ef91c43",
       "size": 21572031
     },
     {
       "name": "tectonic-3.0.17-forge-1.20.1.jar",
       "version": "3.0.17",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/tectonic-3.0.17-forge-1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/tectonic-3.0.17-forge-1.20.1.jar",
       "sha256": "c6de479b27cf090510de3f029918afc9fe17226981bd703e0002f7a25f4d8969",
       "size": 322575
     },
     {
       "name": "VEB-1.1.11-1.20.1.jar",
       "version": "1.1.11",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/VEB-1.1.11-1.20.1.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/VEB-1.1.11-1.20.1.jar",
       "sha256": "efcd65679fde840335fedf3fc04a0535063ab9f56d2dfbaa32621f4d19274511",
       "size": 66073559
     },
     {
       "name": "Vell's Modern Warfare-Beta1.0.1(1.20.1).jar",
       "version": "1.0.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/Vell's Modern Warfare-Beta1.0.1(1.20.1).jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Vell's Modern Warfare-Beta1.0.1(1.20.1).jar",
       "sha256": "46f72af494b0500ffc0a1b19ef7b7045c8489a9c934bb29c3cb41695a2ab6679",
       "size": 5770845
     },
     {
       "name": "voicechat-forge-1.20.1-2.6.15.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/voicechat-forge-1.20.1-2.6.15.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/voicechat-forge-1.20.1-2.6.15.jar",
       "sha256": "32ad8a005a37c38eab378dfbf60d8508cafaf59f790f131f30ae53a96c32bcc2",
       "size": 4902630
     },
     {
       "name": "walkietalkie-forge-1.20.1-1.3.0.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/walkietalkie-forge-1.20.1-1.3.0.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/walkietalkie-forge-1.20.1-1.3.0.jar",
       "sha256": "4fdba55afc3b06eb7f646527437d1233a8f556ce3ad5712d8781f37525c7189b",
       "size": 169451
     }
