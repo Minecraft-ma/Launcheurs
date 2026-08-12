@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-12T01:54:57.219Z",
+  "version": "2026-08-12T02:00:37.698Z",
   "mods": [
     {
       "name": "AdvancedPeripherals-1.20.1-0.7.48r.jar",
@@ -219,13 +219,6 @@
       "size": 49393551
     },
     {
-      "name": "Immersive Vehicles-1.20.1-23.0.0.jar",
-      "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Immersive Vehicles-1.20.1-23.0.0.jar",
-      "sha256": "c8370f60c61b58ca7ce01d0e90161ff26665118baceca8c8f71f644d91f96417",
-      "size": 6224428
-    },
-    {
       "name": "ImmersiveEngineering-1.20.1-10.1.0-171.jar",
       "version": "1.20.1",
       "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/ImmersiveEngineering-1.20.1-10.1.0-171.jar",
@@ -238,6 +231,13 @@
       "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/immersivefixes-1.0.4-all.jar",
       "sha256": "44ec64d5ca82598da04ac21f839801f349883de2ece7cc1a6281a55b03f5b27f",
       "size": 647674
+    },
+    {
+      "name": "ImmersiveVehicles-1.20.1-23.0.0.jar",
+      "version": "1.20.1",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/ImmersiveVehicles-1.20.1-23.0.0.jar",
+      "sha256": "c8370f60c61b58ca7ce01d0e90161ff26665118baceca8c8f71f644d91f96417",
+      "size": 6224428
     },
     {
       "name": "Jade-1.20.1-Forge-11.13.2.jar",
@@ -359,9 +359,9 @@
       "size": 25104473
     },
     {
-      "name": "MTS Official Pack-1.20.1-V29.jar",
+      "name": "MTSOfficialPack-1.20.1-V29.jar",
       "version": "1.20.1",
-      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/MTS Official Pack-1.20.1-V29.jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/MTSOfficialPack-1.20.1-V29.jar",
       "sha256": "a6ca5d37a89fd398cafd96fc8f87673cec5b0247c1651bc0b9f02b23f86c7908",
       "size": 70997298
     },
@@ -513,9 +513,9 @@
       "size": 66073559
     },
     {
-      "name": "Vell's Modern Warfare-Beta1.0.1(1.20.1).jar",
+      "name": "VellsModernWarfare-Beta1.0.1(1.20.1).jar",
       "version": "1.0.1",
-      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/Vell's Modern Warfare-Beta1.0.1(1.20.1).jar",
+      "url": "https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/VellsModernWarfare-Beta1.0.1(1.20.1).jar",
       "sha256": "46f72af494b0500ffc0a1b19ef7b7045c8489a9c934bb29c3cb41695a2ab6679",
       "size": 5770845
     },
