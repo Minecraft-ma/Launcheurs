@@ -1,180 +1,197 @@
-// renderer.js — UI stable pour index.html (onglets)
-
-// ---- debug guard (BlackboxAI) ----
-try {
-  // UI banner (visible sans DevTools)
-  const el = document.createElement('div');
-  el.id = 'bbxRendererBanner';
-  el.textContent = 'RENDERER OK';
-  el.style.position = 'fixed';
-  el.style.top = '35px';
-  el.style.left = '10px';
-  el.style.zIndex = '99999';
-  el.style.background = 'rgba(0,0,0,0.65)';
-  el.style.border = '1px solid rgba(255,255,255,0.2)';
-  el.style.color = '#fff';
-  el.style.padding = '6px 10px';
-  el.style.borderRadius = '999px';
-  el.style.font = '12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas';
-  document.body && document.body.appendChild(el);
-
-} catch (e) {}
-
-// (debug banner removed)
-
-
-window.addEventListener('error', (ev) => {
-  try { console.error('[LauncherUI] window error:', ev.message, ev.error?.stack || ''); } catch {}
-});
-window.addEventListener('unhandledrejection', (ev) => {
-  try { console.error('[LauncherUI] unhandledrejection:', ev.reason); } catch {}
-});
-// ---- end debug guard ----
-
+// renderer.js — UI logic for the launcher
 const $ = (id) => document.getElementById(id);
-
 
 const playButton = $('playButton');
 const installModsButton = $('installMods');
-const updateButton = $('updateButton');
+const refreshModsButton = $('refreshMods');
+const clearLogsButton = $('clearLogs');
+const checkUpdateBtn = $('checkUpdateBtn');
+const saveOptionsButton = $('optSave');
+const minBtn = $('minBtn');
+const closeBtn = $('closeBtn');
+const applyOptionsButton = $('optApply');
 const logOutput = $('logOutput');
+const logOutputFull = $('logOutputFull');
 const status = $('status');
+const progressStage = $('progressStage');
+const progressBar = $('smallProgressBar');
+const progressPercent = $('progressPercent');
 const background = $('background');
 const serverLogo = $('serverLogo');
-const optionsBtn = $('optionsBtn');
-const minBtn = $('minBtn');
-const maxBtn = $('maxBtn');
-const closeBtn = $('closeBtn');
+const usernameInput = $('username');
+const memorySlider = $('memorySlider');
+const memoryValue = $('memoryValue');
+const optUsername = $('optUsername');
+const optMemorySlider = $('optMemorySlider');
+const optMemoryValue = $('optMemoryValue');
+const optOnline = $('optOnline');
+const optAutoUpdate = $('optAutoUpdate');
+const optUpdateInterval = $('optUpdateInterval');
+const updateConfigStatus = $('updateConfigStatus');
+const modsList = $('modsList');
+const currentVersionEl = $('currentVersion');
+const latestVersionEl = $('latestVersion');
 
-let bgList = [];
-let bgIndex = 0;
+const MODS_MANIFEST_URLS = [
+  'https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-v1/mods.json'
+];
+
 let bgTimer = null;
 let launcherListenersAttached = false;
 
-const MODS_MANIFEST_URLS = [
-  'https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-latest/mods.json',
-  'https://raw.githubusercontent.com/Minecraft-ma/DominationRoot/master/mods.json'
-];
-
-function normalizeMemory(value) {
-  const v = (value || '').trim().toUpperCase();
-  if (!v) return '4G';
-  if (/^[0-9]+(G|M)$/.test(v)) return v;
-  if (/^[0-9]+$/.test(v)) return v + 'G';
-  return value;
-}
-
-function setLogText(text) {
-  if (logOutput) logOutput.textContent = text;
-}
-
-function appendLog(line) {
+function appendLog(message) {
   if (!logOutput) return;
-  const maxLines = 350;
-  const current = logOutput.textContent ? logOutput.textContent.split(/\r?\n/) : [];
-  if (line !== undefined && line !== null && String(line).length) current.push(String(line));
-  while (current.length && current[current.length - 1] === '') current.pop();
-  const trimmed = current.slice(Math.max(0, current.length - maxLines));
-  logOutput.textContent = trimmed.join('\n') + '\n';
-
-  const isNearBottom = (logOutput.scrollHeight - logOutput.clientHeight - logOutput.scrollTop) < 40;
-  if (isNearBottom) logOutput.scrollTop = logOutput.scrollHeight;
+  const line = String(message || '');
+  const lines = logOutput.textContent ? logOutput.textContent.split(/\r?\n/) : [];
+  if (line.trim()) lines.push(line);
+  while (lines.length > 300) lines.shift();
+  logOutput.textContent = lines.join('\n') + '\n';
+  if (logOutputFull) logOutputFull.textContent = logOutput.textContent;
+  if ((logOutput.scrollHeight - logOutput.scrollTop - logOutput.clientHeight) < 40) {
+    logOutput.scrollTop = logOutput.scrollHeight;
+  }
 }
 
-function setUiBusy(isBusy) {
-  const disable = !!isBusy;
-  if (playButton) playButton.disabled = disable;
-  if (installModsButton) installModsButton.disabled = disable;
-
-  const usernameEl = $('username');
-  const memoryEl = $('memoryMax');
-  if (usernameEl) usernameEl.disabled = disable;
-  if (memoryEl) memoryEl.disabled = disable;
-
-  if (optionsBtn) optionsBtn.disabled = disable;
-
-  const statusEl = $('status');
-  if (statusEl) statusEl.classList.toggle('status-busy', disable);
-
-  document.body.style.filter = disable ? 'saturate(0.95) brightness(0.95)' : '';
+function updateStatus(text) {
+  if (!status) return;
+  status.innerHTML = '<span id="statusDot"></span>' + text;
 }
 
 function setProgress(stage, percent) {
-  const stageEl = $('progressStage');
-  const barEl = $('smallProgressBar');
-  const pctEl = $('progressPercent');
-  if (stageEl) stageEl.textContent = stage;
-  if (barEl) barEl.style.width = Math.max(0, Math.min(100, percent)) + '%';
-  if (pctEl) pctEl.textContent = Math.max(0, Math.min(100, percent)) + '%';
+  if (progressStage) progressStage.textContent = stage;
+  if (progressBar) progressBar.style.width = Math.max(0, Math.min(100, percent)) + '%';
+  if (progressPercent) progressPercent.textContent = Math.max(0, Math.min(100, percent)) + '%';
 }
 
-function attachLauncherListenersOnce() {
+function setUiBusy(busy) {
+  const disabled = !!busy;
+  [playButton, installModsButton, refreshModsButton, checkUpdateBtn, memorySlider, optMemorySlider, usernameInput, optUsername, optOnline].forEach((el) => {
+    if (el) el.disabled = disabled;
+  });
+  if (status) status.classList.toggle('status-busy', disabled);
+  document.body.style.filter = disabled ? 'saturate(0.95) brightness(0.95)' : '';
+}
+
+function normalizeMemory(value) {
+  const input = String(value || '').trim().toUpperCase();
+  if (!input) return '4G';
+  if (/^[0-9]+(G|M)$/.test(input)) return input;
+  if (/^[0-9]+$/.test(input)) return input + 'G';
+  return input;
+}
+
+function syncMemory(value) {
+  if (!value) value = '4';
+  const numeric = String(value).replace(/[^0-9]/g, '') || '4';
+  if (memorySlider) memorySlider.value = numeric;
+  if (optMemorySlider) optMemorySlider.value = numeric;
+  if (memoryValue) memoryValue.textContent = numeric + 'G';
+  if (optMemoryValue) optMemoryValue.textContent = numeric + 'G';
+}
+
+function syncUsername(value) {
+  if (usernameInput) usernameInput.value = value;
+  if (optUsername) optUsername.value = value;
+}
+
+function saveLocalSettings() {
+  if (usernameInput) localStorage.setItem('launcher-username', usernameInput.value.trim() || 'Player');
+  if (memorySlider) localStorage.setItem('launcher-memory', String(memorySlider.value || optMemorySlider?.value || '4'));
+  if (optOnline) localStorage.setItem('launcher-online', optOnline.checked ? 'true' : 'false');
+}
+
+async function saveUpdateConfig() {
+  if (!optAutoUpdate || !optUpdateInterval) return;
+  try {
+    const result = await window.launcherApi.setUpdateConfig({
+      enabled: optAutoUpdate.checked,
+      autoDownload: optAutoUpdate.checked,
+      checkInterval: Number(optUpdateInterval.value) || 24
+    });
+    if (result.ok) {
+      if (updateConfigStatus) updateConfigStatus.textContent = 'Configuration de mise à jour sauvegardée.';
+      return true;
+    }
+  } catch (e) {
+    // ignore
+  }
+  if (updateConfigStatus) updateConfigStatus.textContent = 'Échec de la sauvegarde de la configuration.';
+  return false;
+}
+
+function loadLocalSettings() {
+  const savedName = localStorage.getItem('launcher-username') || 'Player';
+  const savedMemory = localStorage.getItem('launcher-memory') || '4';
+  const savedOnline = localStorage.getItem('launcher-online') || 'false';
+  syncUsername(savedName);
+  syncMemory(savedMemory);
+  if (optOnline) optOnline.checked = savedOnline === 'true';
+}
+
+async function loadUpdateConfig() {
+  try {
+    const result = await window.launcherApi.getUpdateConfig();
+    if (!result.ok) throw new Error(result.error || 'Impossible de charger la config');
+    const config = result.config || {};
+    if (optAutoUpdate) optAutoUpdate.checked = config.enabled !== false;
+    if (optUpdateInterval) optUpdateInterval.value = Number(config.checkInterval || 24);
+    if (updateConfigStatus) {
+      updateConfigStatus.textContent = 'Paramètres de mise à jour chargés.';
+    }
+  } catch (e) {
+    if (updateConfigStatus) {
+      updateConfigStatus.textContent = 'Impossible de charger la configuration de mise à jour.';
+    }
+  }
+}
+
+function getLaunchSettings() {
+  const username = (usernameInput?.value || optUsername?.value || 'Player').trim() || 'Player';
+  const memory = normalizeMemory((memorySlider?.value || optMemorySlider?.value || '4') + 'G');
+  return {
+    username,
+    memoryMax: memory,
+    online: !!(optOnline?.checked)
+  };
+}
+
+function attachLauncherListeners() {
   if (launcherListenersAttached) return;
   launcherListenersAttached = true;
-
-  window.launcherApi?.onDebug?.((m) => appendLog('[DEBUG] ' + m));
-  window.launcherApi?.onData?.((d) => appendLog(String(d)));
-  window.launcherApi?.onProgress?.((p) => {
-    try {
-      if (p && p.percent != null) {
-        const percent = Math.round(p.percent * 100);
-        setProgress(p.task || 'Telechargement', percent);
-        if (p.current != null && p.total != null) {
-          status.textContent = `${p.task || 'Telechargement'} ${percent}% (${p.current}/${p.total})`;
-        } else {
-          status.textContent = `${p.task || 'Telechargement'} ${percent}%`;
-        }
-      } else if (p && typeof p === 'string') {
-        setProgress('Progress', 50);
-        status.textContent = p;
-      }
-    } catch (e) {}
+  window.launcherApi?.onDebug?.((message) => appendLog('[DEBUG] ' + String(message)));
+  window.launcherApi?.onData?.((data) => appendLog(String(data)));
+  window.launcherApi?.onProgress?.((payload) => {
+    if (payload && typeof payload === 'object' && payload.percent != null) {
+      const percent = Math.round(payload.percent * 100);
+      setProgress(payload.task || 'Progress', percent);
+      updateStatus(`${payload.task || 'Progress'} ${percent}%`);
+    } else if (typeof payload === 'string') {
+      updateStatus(payload);
+    }
+  });
+  window.launcherApi?.onUpdateAvailable?.((info) => {
+    if (latestVersionEl) {
+      latestVersionEl.textContent = 'v' + info.version;
+      latestVersionEl.style.color = '#5fb0ff';
+    }
+    appendLog('⬇️ Mise à jour disponible: v' + info.version);
+  });
+  window.launcherApi?.onUpdateNotAvailable?.((info) => {
+    if (latestVersionEl) {
+      latestVersionEl.textContent = 'v' + info.version + ' (à jour)';
+      latestVersionEl.style.color = '#4ade80';
+    }
+    appendLog('✅ Version à jour.');
+  });
+  window.launcherApi?.onUpdateDownloaded?.((info) => {
+    appendLog('✅ Mise à jour téléchargée: v' + info.version);
+  });
+  window.launcherApi?.onUpdateError?.((info) => {
+    appendLog('❌ Erreur de mise à jour: ' + info.error);
   });
 }
 
-async function startBackgroundCycle() {
-  try {
-    bgList = await window.launcherApi.getBackgroundImages();
-  } catch (e) {
-    bgList = [];
-  }
-
-  if (!bgList || !bgList.length) {
-    if (background) background.style.background = 'linear-gradient(120deg,#0b1220,#1a2a3a)';
-    return;
-  }
-
-  bgIndex = Math.floor(Math.random() * bgList.length);
-  setBackground(bgIndex);
-
-  if (bgTimer) clearInterval(bgTimer);
-  bgTimer = setInterval(() => {
-    bgIndex = (bgIndex + 1) % bgList.length;
-    setBackground(bgIndex);
-  }, 8000);
-}
-
-function setBackground(i) {
-  if (!background || !bgList || !bgList.length) return;
-  const url = bgList[i];
-  background.style.backgroundImage = `url("${url}")`;
-}
-
-async function loadLogo() {
-  try {
-    const logo = await window.launcherApi.getServerLogo();
-    if (!serverLogo) return;
-    serverLogo.src = logo || 'images/logo.png';
-  } catch (e) {
-    if (serverLogo) serverLogo.src = 'images/logo.png';
-  }
-}
-
-// Tabs
-let activeView = 'accueil';
-
 function setActiveView(viewKey) {
-  activeView = viewKey;
   const map = {
     accueil: 'viewAccueil',
     options: 'viewOptions',
@@ -182,417 +199,202 @@ function setActiveView(viewKey) {
     logs: 'viewLogs',
     apropos: 'viewApropos'
   };
+  if (!viewKey || !map[viewKey]) {
+    viewKey = 'accueil';
+  }
 
   Object.values(map).forEach((id) => {
     const el = $(id);
     if (el) el.classList.remove('active-view');
   });
 
-  const target = $(map[viewKey] || 'viewAccueil');
+  const target = $(map[viewKey]);
   if (target) target.classList.add('active-view');
 
   document.querySelectorAll('#tabs .tab-btn').forEach((btn) => {
-    const is = btn.getAttribute('data-view') === viewKey;
-    btn.setAttribute('aria-selected', is ? 'true' : 'false');
+    const dataView = String(btn.dataset.view || '').trim();
+    const selected = dataView === viewKey;
+    btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+    btn.classList.toggle('active', selected);
   });
 }
 
-// Options (profiles)
-const PROFILES_KEY = 'launcherProfiles';
-const ACTIVE_PROFILE_KEY = 'launcherActiveProfile';
-
-function loadProfiles() {
+async function loadBackgrounds() {
   try {
-    return JSON.parse(localStorage.getItem(PROFILES_KEY) || '[]');
-  } catch {
-    return [];
+    const list = await window.launcherApi.getBackgroundImages();
+    if (!list || !list.length) throw new Error('no backgrounds');
+    let index = Math.floor(Math.random() * list.length);
+    if (background) background.style.backgroundImage = `url("${list[index]}")`;
+    if (bgTimer) clearInterval(bgTimer);
+    bgTimer = setInterval(() => {
+      index = (index + 1) % list.length;
+      if (background) background.style.backgroundImage = `url("${list[index]}")`;
+    }, 8000);
+  } catch (e) {
+    if (background) background.style.background = 'linear-gradient(120deg,#0b1220,#1a2a3a)';
   }
 }
 
-function saveProfiles(profiles) {
-  localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
-}
-
-function getActiveProfile() {
+async function loadLogo() {
   try {
-    const name = localStorage.getItem(ACTIVE_PROFILE_KEY);
-    const profiles = loadProfiles();
-    return profiles.find((p) => p && p.name === name) || null;
-  } catch {
-    return null;
+    const logo = await window.launcherApi.getServerLogo();
+    if (serverLogo && logo) serverLogo.src = logo;
+  } catch (e) {
+    // ignore
   }
 }
 
-function setActiveProfile(name) {
-  localStorage.setItem(ACTIVE_PROFILE_KEY, name);
-}
-
-function normalizeProfile(profile) {
-  return {
-    name: String(profile?.name || '').trim(),
-    username: String(profile?.username || '').trim() || 'Player',
-    memoryMin: normalizeMemory(profile?.memoryMin || profile?.memoryMax || '2G'),
-    memoryMax: normalizeMemory(profile?.memoryMax || '4G'),
-    javaPath: String(profile?.javaPath || ''),
-    launchDir: String(profile?.launchDir || '')
-  };
-}
-
-function parseMemoryValue(v) {
-  const out = (v || '').trim().toUpperCase();
-  if (!out) return null;
-  if (/^[0-9]+G$/.test(out) || /^[0-9]+M$/.test(out)) return out;
-  if (/^[0-9]+$/.test(out)) return out + 'G';
-  return out;
-}
-
-function validateMemoryRange(minV, maxV) {
-  const minStr = parseMemoryValue(minV);
-  const maxStr = parseMemoryValue(maxV);
-  const ra = minStr && minStr.endsWith('G') ? Number(minStr.slice(0, -1)) : NaN;
-  const rb = maxStr && maxStr.endsWith('G') ? Number(maxStr.slice(0, -1)) : NaN;
-  if (Number.isNaN(ra) || Number.isNaN(rb)) return { ok: false, msg: 'Formats Min/Max: ex 2G, 6G' };
-  if (ra > rb) return { ok: false, msg: 'Min doit être <= Max' };
-  return { ok: true, msg: 'OK' };
-}
-
-function setValidationMessage(msg) {
-  const el = $('optMemoryValidation');
-  if (!el) return;
-  el.textContent = msg || '—';
-  el.style.color = 'rgba(255,255,255,0.6)';
-  if (msg && msg !== 'OK') el.style.color = 'rgba(255,120,120,0.9)';
-  if (msg === 'OK') el.style.color = 'rgba(95,176,255,0.9)';
-}
-
-function readOptionsFromUI() {
-  const username = $('optUsername')?.value || 'Player';
-  const memoryMin = $('optMemoryMin')?.value || '2G';
-  const memoryMax = $('optMemoryMax')?.value || '4G';
-  const javaPath = $('optJavaPath')?.value || '';
-  const launchDir = $('optLaunchDir')?.value || '';
-  return {
-    username,
-    memoryMin: normalizeMemory(memoryMin),
-    memoryMax: normalizeMemory(memoryMax),
-    javaPath,
-    launchDir
-  };
-}
-
-function fillUIFromProfile(profile) {
-  const p = normalizeProfile(profile || {});
-  if ($('optUsername')) $('optUsername').value = p.username;
-  if ($('optMemoryMin')) $('optMemoryMin').value = p.memoryMin;
-  if ($('optMemoryMax')) $('optMemoryMax').value = p.memoryMax;
-  if ($('optJavaPath')) $('optJavaPath').value = p.javaPath;
-  if ($('optLaunchDir')) $('optLaunchDir').value = p.launchDir;
-
-  const v = validateMemoryRange(p.memoryMin, p.memoryMax);
-  setValidationMessage(v.ok ? 'OK' : v.msg);
-}
-
-function ensureDefaultProfile() {
-  const profiles = loadProfiles();
-  if (!profiles.length) {
-    const defaults = {
-      name: 'Default',
-      username: $('username')?.value || 'Player',
-      memoryMin: '2G',
-      memoryMax: '4G',
-      javaPath: '',
-      launchDir: ''
-    };
-    saveProfiles([defaults]);
-    setActiveProfile('Default');
+async function loadVersion() {
+  try {
+    const result = await window.launcherApi.getAppVersion();
+    if (result.ok && currentVersionEl) currentVersionEl.textContent = 'v' + result.version;
+  } catch (e) {
+    // ignore
   }
 }
 
-function renderProfilesSelect() {
-  const sel = $('optProfileSelect');
-  if (!sel) return;
-  ensureDefaultProfile();
-
-  const profiles = loadProfiles();
-  const active = getActiveProfile();
-
-  sel.innerHTML = '';
-  profiles.forEach((p) => {
-    const opt = document.createElement('option');
-    opt.value = p.name;
-    opt.textContent = p.name;
-    sel.appendChild(opt);
-  });
-
-  sel.value = active?.name || profiles[0]?.name || '';
+async function refreshModsList() {
+  if (!modsList) return;
+  modsList.textContent = 'Installation de mods depuis GitHub uniquement. Appuyez sur Installer pour télécharger le manifest et les mods.';
 }
 
-let optionsBound = false;
-function initOptionsProfilesUI() {
-  const sel = $('optProfileSelect');
-  if (!sel) return;
-  if (optionsBound) return;
-  optionsBound = true;
-
-  renderProfilesSelect();
-  const active = getActiveProfile();
-  if (active) fillUIFromProfile(active);
-
-  sel.addEventListener('change', () => {
-    const selected = sel.value;
-    setActiveProfile(selected);
-    const p = loadProfiles().find((x) => x?.name === selected);
-    fillUIFromProfile(p);
-  });
-
-  $('optProfileCreate')?.addEventListener('click', () => {
-    const name = ($('optProfileName')?.value || '').trim();
-    if (!name) return;
-    const profiles = loadProfiles();
-    if (profiles.some((p) => p?.name === name)) return;
-
-    const ui = readOptionsFromUI();
-    const profile = normalizeProfile({ name, ...ui });
-    profiles.push(profile);
-    saveProfiles(profiles);
-    setActiveProfile(name);
-    renderProfilesSelect();
-    fillUIFromProfile(profile);
-  });
-
-  $('optMemoryMin')?.addEventListener('input', () => {
-    const ui = readOptionsFromUI();
-    const v = validateMemoryRange(ui.memoryMin, ui.memoryMax);
-    setValidationMessage(v.ok ? 'OK' : v.msg);
-  });
-  $('optMemoryMax')?.addEventListener('input', () => {
-    const ui = readOptionsFromUI();
-    const v = validateMemoryRange(ui.memoryMin, ui.memoryMax);
-    setValidationMessage(v.ok ? 'OK' : v.msg);
-  });
-
-  $('optApplyMemory')?.addEventListener('click', () => {
-    const ui = readOptionsFromUI();
-    const v = validateMemoryRange(ui.memoryMin, ui.memoryMax);
-    if (!v.ok) return setValidationMessage(v.msg);
-    if ($('memoryMax')) $('memoryMax').value = ui.memoryMax;
-    setValidationMessage('OK');
-  });
-
-  $('optSave')?.addEventListener('click', () => {
-    const activeName = localStorage.getItem(ACTIVE_PROFILE_KEY);
-    if (!activeName) return;
-    const profiles = loadProfiles();
-    const idx = profiles.findIndex((p) => p?.name === activeName);
-    if (idx < 0) return;
-
-    const ui = readOptionsFromUI();
-    profiles[idx] = normalizeProfile({ name: activeName, ...ui });
-    saveProfiles(profiles);
-  });
-
-  $('optResetDefaults')?.addEventListener('click', () => {
-    const p = getActiveProfile();
-    if (!p) return;
-    const updated = normalizeProfile({ ...p, username: 'Player', memoryMin: '2G', memoryMax: '4G', javaPath: '', launchDir: '' });
-    const profiles = loadProfiles();
-    const idx = profiles.findIndex((x) => x?.name === p.name);
-    if (idx >= 0) profiles[idx] = updated;
-    saveProfiles(profiles);
-    fillUIFromProfile(updated);
-  });
-
-  $('optApply')?.addEventListener('click', () => {
-    const ui = readOptionsFromUI();
-    const v = validateMemoryRange(ui.memoryMin, ui.memoryMax);
-    if (!v.ok) return setValidationMessage(v.msg);
-    if ($('username')) $('username').value = ui.username;
-    if ($('memoryMax')) $('memoryMax').value = ui.memoryMax;
-    setValidationMessage('OK');
-  });
-
-  $('optCancel')?.addEventListener('click', () => {
-    const p = getActiveProfile();
-    if (p) fillUIFromProfile(p);
-  });
-}
-
-// Buttons
-function bindUI() {
-  updateButton?.addEventListener('click', async () => {
-    setUiBusy(true);
-    const previousText = updateButton.textContent;
-    updateButton.textContent = 'Vérification...';
-    status.textContent = 'Vérification des mises à jour...';
-    setProgress('Mise à jour', 0);
-
-    try {
-      const res = await window.launcherApi.checkForUpdates();
-      if (res?.ok) {
-        appendLog('[UPDATE] Vérification terminée.');
-        status.textContent = 'Vérification terminée.';
-      } else {
-        throw new Error(res?.error || 'Vérification impossible');
+async function installMods() {
+  setUiBusy(true);
+  setProgress('Installation', 0);
+  updateStatus('Téléchargement des mods depuis GitHub...');
+  appendLog('Début de l’installation des mods depuis GitHub');
+  try {
+    let result = null;
+    for (const url of MODS_MANIFEST_URLS) {
+      appendLog('[INFO] Manifest: ' + url);
+      result = await window.launcherApi.downloadModsFromManifest(url);
+      if (result && result.ok) {
+        break;
       }
-    } catch (err) {
-      const msg = err?.message || String(err);
-      appendLog(`[UPDATE] ${msg}`);
-      status.textContent = 'Impossible de vérifier les mises à jour : ' + msg;
-    } finally {
-      updateButton.textContent = previousText;
-      setUiBusy(false);
+      appendLog('[WARN] Échec manifest: ' + (result?.error || result?.message || 'Erreur inconnue'));
     }
-  });
-
-  $('tabs')?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.tab-btn');
-    if (!btn) return;
-    setActiveView(btn.getAttribute('data-view'));
-  });
-
-  optionsBtn?.addEventListener('click', () => setActiveView('options'));
-  minBtn?.addEventListener('click', () => window.launcherApi.windowMinimize());
-  maxBtn?.addEventListener('click', () => window.launcherApi.windowToggleMaximize());
-  closeBtn?.addEventListener('click', () => window.launcherApi.windowClose());
-
-  if (installModsButton) {
-    installModsButton.addEventListener('click', async () => {
-      setUiBusy(true);
-      const prevText = installModsButton.textContent;
-      installModsButton.textContent = 'Installation...';
-
-      status.textContent = 'Telechargement des mods depuis GitHub...';
-      setProgress('Installation', 0);
-      setLogText('');
-
-      try {
-        let lastErr = null;
-        let result = null;
-        for (const url of MODS_MANIFEST_URLS) {
-          try {
-            result = await window.launcherApi.downloadModsFromManifest(url);
-            break;
-          } catch (e) {
-            lastErr = e;
-          }
-        }
-        if (!result) throw lastErr || new Error('Aucun manifest GitHub valide trouvé.');
-
-        setProgress('Installation', 100);
-        status.textContent = result.message || 'Mods telecharges.';
-        appendLog(result.message || 'Mods telecharges.');
-      } catch (err) {
-        appendLog('[INFO] GitHub non disponible, utilisation des mods locaux...');
-        try {
-          const result = await window.launcherApi.installMods();
-          setProgress('Installation', 100);
-          status.textContent = result.message || 'Installation des mods locaux terminees.';
-          appendLog(result.message || 'Installation des mods locaux terminees.');
-        } catch (err2) {
-          setProgress('Erreur', 0);
-          status.textContent = 'Erreur installation mods : ' + (err2.message || String(err2));
-          appendLog('[ERROR] ' + (err2.message || String(err2)));
-        }
-      } finally {
-        installModsButton.textContent = prevText;
-        setUiBusy(false);
-      }
-    });
-  }
-
-  playButton?.addEventListener('click', async () => {
-    setUiBusy(true);
-    const prevText = playButton.textContent;
-    playButton.textContent = 'Lancement...';
-    status.textContent = 'Lancement...';
-    setLogText('');
-
-    try {
-      // UI refactor: username/mémoire sont dans le profil Options, pas dans #username/#memoryMax
-      const activeProfileName = localStorage.getItem(ACTIVE_PROFILE_KEY);
-      const profiles = loadProfiles();
-      const activeProfile = profiles.find((p) => p?.name === activeProfileName) || null;
-
-      const fallbackUsername = ($('username')?.value || '').trim() || 'Player';
-      const fallbackMemoryMax = normalizeMemory($('memoryMax')?.value || '4G');
-
-      const settings = {
-        username: (activeProfile?.username || fallbackUsername).trim() || 'Player',
-        // main.js n'utilise que memory.max
-        memoryMax: normalizeMemory(activeProfile?.memoryMax || fallbackMemoryMax)
-      };
-
-
-      attachLauncherListenersOnce();
-      setProgress('Preparation', 0);
-
-      const res = await window.launcherApi.launchMinecraft(settings);
-      if (res && res.success) {
-        setProgress('Lancement', 100);
-        status.textContent = 'Minecraft lance.';
-      } else {
-        const msg = (res && res.message) ? res.message : 'inconnue';
-        status.textContent = 'Erreur: ' + msg;
-      }
-    } catch (err) {
-      const msg = err && err.message ? err.message : String(err);
-      status.textContent = 'Erreur lors du lancement: ' + msg;
-      appendLog('[ERROR] ' + msg);
-    } finally {
-      playButton.textContent = prevText;
-      setUiBusy(false);
+    if (result && result.ok) {
+      appendLog(result.message || 'Mods téléchargés depuis GitHub.');
+      updateStatus(result.message || 'Mods téléchargés depuis GitHub.');
+      setProgress('Installation', 100);
+      return;
     }
-  });
 
-  $('clearLogs')?.addEventListener('click', () => {
-    setLogText('');
-    $('logOutputFull') && ($('logOutputFull').textContent = '');
-  });
+    appendLog('[ERROR] Impossible d’installer les mods depuis GitHub.');
+    updateStatus('Échec installation des mods GitHub');
+    setProgress('Erreur', 0);
+  } catch (e) {
+    appendLog('[ERROR] ' + (e.message || String(e)));
+    updateStatus('Erreur installation des mods');
+    setProgress('Erreur', 0);
+  } finally {
+    await refreshModsList();
+    setUiBusy(false);
+  }
+}
 
-  $('refreshMods')?.addEventListener('click', async () => {
-    setUiBusy(true);
-    try {
-      const result = await window.launcherApi.installMods();
-      const el = $('modsList');
-      if (el) el.textContent = result.message || 'OK';
-      setActiveView('mods');
-    } catch (e) {
+async function launchMinecraft() {
+  setUiBusy(true);
+  attachLauncherListeners();
+  setProgress('Préparation', 0);
+  updateStatus('Préparation du lancement...');
+  appendLog('Préparation du lancement...');
+  saveLocalSettings();
+  const settings = getLaunchSettings();
+  try {
+    const result = await window.launcherApi.launchMinecraft(settings);
+    if (result && result.success) {
+      appendLog('✅ Minecraft lancé.');
+      updateStatus('Minecraft lancé.');
+      setProgress('Lancement', 100);
       setActiveView('logs');
-    } finally {
-      setUiBusy(false);
+    } else {
+      appendLog('[ERROR] ' + (result?.message || 'Échec inconnu.'));
+      updateStatus('Erreur: ' + (result?.message || 'Échec inconnu.'));
+      setProgress('Erreur', 0);
     }
+  } catch (e) {
+    appendLog('[ERROR] ' + (e.message || String(e)));
+    updateStatus('Erreur de lancement.');
+    setProgress('Erreur', 0);
+  } finally {
+    setUiBusy(false);
+  }
+}
+
+async function checkUpdates() {
+  setUiBusy(true);
+  updateStatus('Vérification des mises à jour...');
+  appendLog('Vérification des mises à jour...');
+  try {
+    const result = await window.launcherApi.checkForUpdates();
+    if (result.ok) {
+      appendLog('Vérification de mise à jour terminée.');
+      updateStatus('Vérification terminée.');
+    } else {
+      appendLog('[UPDATE] ' + (result.error || 'Erreur inconnue.'));
+      updateStatus('Erreur mise à jour.');
+    }
+  } catch (e) {
+    appendLog('[UPDATE] ' + (e.message || String(e)));
+    updateStatus('Erreur mise à jour.');
+  } finally {
+    setUiBusy(false);
+  }
+}
+
+function bindUI() {
+  document.querySelectorAll('#tabs .tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => setActiveView(btn.getAttribute('data-view')));
   });
+  if (playButton) playButton.addEventListener('click', launchMinecraft);
+  if (installModsButton) installModsButton.addEventListener('click', installMods);
+  if (checkUpdateBtn) checkUpdateBtn.addEventListener('click', checkUpdates);
+  if (minBtn) minBtn.addEventListener('click', () => window.launcherApi.windowMinimize());
+  if (closeBtn) closeBtn.addEventListener('click', () => window.launcherApi.windowClose());
+  if (refreshModsButton) refreshModsButton.addEventListener('click', async () => {
+    setUiBusy(true);
+    updateStatus('Rafraîchissement mods...');
+    await refreshModsList();
+    setUiBusy(false);
+    setActiveView('mods');
+  });
+  if (clearLogsButton) clearLogsButton.addEventListener('click', () => {
+    if (logOutput) logOutput.textContent = '';
+    if (logOutputFull) logOutputFull.textContent = '';
+  });
+  if (saveOptionsButton) saveOptionsButton.addEventListener('click', async () => {
+    saveLocalSettings();
+    await saveUpdateConfig();
+    updateStatus('Options sauvegardées.');
+    appendLog('Options sauvegardées.');
+  });
+  if (applyOptionsButton) applyOptionsButton.addEventListener('click', async () => {
+    saveLocalSettings();
+    await saveUpdateConfig();
+    loadLocalSettings();
+    updateStatus('Options appliquées.');
+    appendLog('Options appliquées.');
+  });
+  if (memorySlider) {
+    memorySlider.addEventListener('input', () => syncMemory(memorySlider.value));
+  }
+  if (optMemorySlider) {
+    optMemorySlider.addEventListener('input', () => syncMemory(optMemorySlider.value));
+  }
+  if (usernameInput) usernameInput.addEventListener('change', saveLocalSettings);
+  if (optUsername) optUsername.addEventListener('change', saveLocalSettings);
+  if (optOnline) optOnline.addEventListener('change', saveLocalSettings);
 }
 
-function syncLogToLogsView() {
-  const full = $('logOutputFull');
-  const footer = $('logOutput');
-  if (!full) return;
-  if (footer) full.textContent = footer.textContent || '';
-}
-
-// Keep logs in sync (footer -> tab)
-const _appendLog = appendLog;
-appendLog = function(line) {
-  _appendLog(line);
-  syncLogToLogsView();
-};
-
-// Also keep in sync on view switch (covers cases where tab was opened after logs)
-function maybeSyncLogsOnViewChange(viewKey) {
-  if (viewKey === 'logs') syncLogToLogsView();
-}
-
-
-// Boot
 (async () => {
   bindUI();
-  await startBackgroundCycle();
+  loadLocalSettings();
+  await loadUpdateConfig();
+  await loadBackgrounds();
   await loadLogo();
+  await loadVersion();
+  await refreshModsList();
   setActiveView('accueil');
-  initOptionsProfilesUI();
-
-  // Initial sync
-  syncLogToLogsView();
+  updateStatus('✨ Prêt à jouer');
 })();
-

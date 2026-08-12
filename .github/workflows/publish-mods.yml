@@ -1,0 +1,56 @@
+name: Publish Mods Release
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Generate mods manifest
+        run: |
+          node .github/scripts/generate-manifest.js mods mods.json
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: mods-v${{ github.run_number }}
+          name: Mods Release v${{ github.run_number }}
+          draft: false
+          prerelease: false
+          files: |
+            mods/*.jar
+            mods.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update mods-latest tag
+        run: |
+          git tag -f mods-latest
+          git push -f origin mods-latest
+      
+      - name: Create mods-latest release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: mods-latest
+          name: Mods Latest
+          draft: false
+          prerelease: false
+          files: |
+            mods/*.jar
+            mods.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
