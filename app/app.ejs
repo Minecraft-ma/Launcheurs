@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domination World Launcher</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="frame">
+            <div class="frame-header">
+                <div class="frame-header-left">
+                    <div class="frame-logo">
+                        <div class="logo-placeholder">DW</div>
+                    </div>
+                    <div class="frame-title">Domination World</div>
+                </div>
+                <div class="frame-header-right">
+                    <div class="frame-controls">
+                        <button class="frame-btn frame-btn-minimize" id="frameBtnMinimize">
+                            <svg width="12" height="12" viewBox="0 0 12 12">
+                                <rect x="2" y="5" width="8" height="2" fill="currentColor"/>
+                            </svg>
+                        </button>
+                        <button class="frame-btn frame-btn-maximize" id="frameBtnMaximize">
+                            <svg width="12" height="12" viewBox="0 0 12 12">
+                                <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                        <button class="frame-btn frame-btn-close" id="frameBtnClose">
+                            <svg width="12" height="12" viewBox="0 0 12 12">
+                                <path d="M2 2 L10 10 M10 2 L2 10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+            <div id="welcome-view" class="view active">
+                <div class="welcome-container">
+                    <div class="welcome-content">
+                        <h1>Bienvenue!</h1>
+                        <p>Merci d'avoir téléchargé Domination World Launcher.</p>
+                        <p>Préparez-vous à rejoindre notre serveur modded!</p>
+                        <button class="btn btn-primary" id="welcomeButton">Commencer</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="login-view" class="view">
+                <div class="login-container">
+                    <div class="login-header">
+                        <h1>Connexion</h1>
+                        <p>Connectez-vous pour accéder au serveur</p>
+                    </div>
+                    
+                    <div class="login-methods">
+                        <button class="btn btn-microsoft" id="microsoftLoginButton">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M0 0h11.377v11.372H0V0zm12.623 0H24v11.372H12.623V0zM0 12.623h11.377V24H0V12.623zm12.623 0H24V24H12.623V12.623z" fill="#f25022"/>
+                                <path d="M12.623 0H24v11.372H12.623V0z" fill="#7fba00"/>
+                                <path d="M0 12.623h11.377V24H0V12.623z" fill="#00a4ef"/>
+                                <path d="M12.623 12.623H24V24H12.623V12.623z" fill="#ffb900"/>
+                            </svg>
+                            <span>Connexion Microsoft</span>
+                        </button>
+                        
+                        <div class="login-divider">
+                            <span>ou</span>
+                        </div>
+                        
+                        <button class="btn btn-offline" id="offlineLoginButton">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                            </svg>
+                            <span>Connexion hors ligne</span>
+                        </button>
+                    </div>
+                    
+                    <div class="login-footer">
+                        <p>Vos informations sont sécurisées et transmises directement à Microsoft.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="landing-view" class="view">
+                <div class="landing-container">
+                    <div class="landing-sidebar">
+                        <div class="player-card">
+                            <div class="player-avatar">
+                                <div class="avatar-placeholder">?</div>
+                            </div>
+                            <div class="player-info">
+                                <div class="player-name" id="playerName">Joueur</div>
+                                <div class="player-status" id="playerStatus">Non connecté</div>
+                            </div>
+                        </div>
+                        
+                        <div class="server-info">
+                            <div class="server-info-header">
+                                <div class="server-name">Domination World</div>
+                                <div class="server-status" id="serverStatus">
+                                    <span class="status-dot"></span>
+                                    <span class="status-text">En ligne</span>
+                                </div>
+                            </div>
+                            <div class="server-stats">
+                                <div class="server-stat">
+                                    <span class="stat-label">Joueurs:</span>
+                                    <span class="stat-value" id="playerCount">0/100</span>
+                                </div>
+                                <div class="server-stat">
+                                    <span class="stat-label">Version:</span>
+                                    <span class="stat-value">1.20.1</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-play" id="playButton">
+                                <span class="btn-text">Jouer</span>
+                            </button>
+                            <button class="btn btn-secondary" id="newsButton">
+                                <span class="btn-text">Actualités</span>
+                            </button>
+                            <button class="btn btn-secondary" id="settingsButton">
+                                <span class="btn-text">Paramètres</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="landing-main">
+                        <div class="news-section">
+                            <div class="news-header">
+                                <h2>Actualités</h2>
+                            </div>
+                            <div class="news-content" id="newsContent">
+                                <div class="news-item">
+                                    <div class="news-item-title">Bienvenue sur Domination World!</div>
+                                    <div class="news-item-date">9 août 2026</div>
+                                    <div class="news-item-description">
+                                        Rejoignez notre serveur modded et découvrez un monde d'aventures!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="settings-view" class="view">
+                <div class="settings-container">
+                    <div class="settings-header">
+                        <h1>Paramètres</h1>
+                        <button class="btn btn-back" id="settingsBackButton">
+                            <svg width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M10 5L5 10L10 15" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M5 10H15" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Retour
+                        </button>
+                    </div>
+                    
+                    <div class="settings-content">
+                        <div class="settings-section">
+                            <h2>Paramètres Java</h2>
+                            <div class="setting-item">
+                                <label class="setting-label">Mémoire allouée</label>
+                                <div class="setting-control">
+                                    <input type="range" min="2" max="16" value="4" id="memorySlider">
+                                    <span class="setting-value" id="memoryValue">4GB</span>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label class="setting-label">Chemin Java personnalisé</label>
+                                <div class="setting-control">
+                                    <input type="text" placeholder="Auto-détection" id="customJavaPath">
+                                    <button class="btn btn-small" id="browseJavaButton">Parcourir</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h2>Paramètres du jeu</h2>
+                            <div class="setting-item">
+                                <label class="setting-label">Résolution de la fenêtre</label>
+                                <div class="setting-control">
+                                    <select id="resolutionSelect">
+                                        <option value="854x480">854x480 (480p)</option>
+                                        <option value="1280x720">1280x720 (720p)</option>
+                                        <option value="1920x1080" selected>1920x1080 (1080p)</option>
+                                        <option value="2560x1440">2560x1440 (1440p)</option>
+                                        <option value="3840x2160">3840x2160 (4K)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label class="setting-label">Plein écran</label>
+                                <div class="setting-control">
+                                    <input type="checkbox" id="fullscreenCheckbox">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h2>Paramètres du launcher</h2>
+                            <div class="setting-item">
+                                <label class="setting-label">Démarrage minimisé</label>
+                                <div class="setting-control">
+                                    <input type="checkbox" id="startMinimizedCheckbox">
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label class="setting-label">Mises à jour automatiques</label>
+                                <div class="setting-control">
+                                    <input type="checkbox" id="autoUpdateCheckbox" checked>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-actions">
+                            <button class="btn btn-primary" id="saveSettingsButton">Enregistrer</button>
+                            <button class="btn btn-secondary" id="resetSettingsButton">Réinitialiser</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="assets/js/renderer.js"></script>
+</body>
+</html>

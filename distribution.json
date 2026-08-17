@@ -1,0 +1,37 @@
+{
+  "minecraftVersion": "1.20.1",
+  "forgeVersion": "47.4.10",
+  "servers": [
+    {
+      "id": "domination-world",
+      "name": "Domination World",
+      "icon": "https://example.com/server-icon.png",
+      "address": "play.dominationworld.com",
+      "port": 25565,
+      "motd": "Bienvenue sur Domination World!",
+      "version": "1.20.1",
+      "players": {
+        "max": 100,
+        "online": 45
+      }
+    }
+  ],
+  "news": [
+    {
+      "title": "Bienvenue sur Domination World!",
+      "date": "2026-08-09",
+      "content": "Rejoignez notre serveur modded et découvrez un monde d'aventures!",
+      "author": "Admin"
+    },
+    {
+      "title": "Mise à jour des mods",
+      "date": "2026-08-08",
+      "content": "Nouveaux mods disponibles: Applied Energistics 2, Mekanism, et plus encore!",
+      "author": "TechTeam"
+    }
+  ],
+  "mods": {
+    "manifestUrl": "https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-v1/mods.json",
+    "required": true
+  }
+}

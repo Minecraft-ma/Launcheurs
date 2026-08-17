@@ -4,7 +4,6 @@ const os = require('os');
 const fs = require('fs');
 const https = require('https');
 const crypto = require('crypto');
-const { autoUpdater } = require('electron-updater');
 const { Client, Authenticator } = require('minecraft-launcher-core');
 
 const APP_ROOT = app ? app.getPath('userData') : path.join(os.homedir(), '.minecraft-launcher-electron');
@@ -12,6 +11,12 @@ const LAUNCH_ROOT = path.join(APP_ROOT, 'launcher-root');
 const WORKSPACE_MODS_DIR = path.join(__dirname, 'mods');
 const WORKSPACE_FORGE_JAR = path.join(__dirname, 'forge-1.20.1-47.4.10-installer.jar');
 const DEFAULT_VERSION = '1.20.1';
+
+// URLs de manifests de mods GitHub
+const MODS_MANIFEST_URLS = [
+  'https://github.com/Minecraft-ma/Launcheurs/releases/download/mods-latest/mods.json',
+  'https://raw.githubusercontent.com/Minecraft-ma/Launcheurs/main/mods.json'
+];
 
 function ensureLaunchRoot() {
   if (!fs.existsSync(LAUNCH_ROOT)) {
@@ -108,8 +113,6 @@ async function downloadModsFromManifest(manifestUrl, event) {
     if (event) event.sender.send('launcher-debug', `📥 Téléchargement du manifest: ${manifestUrl}`);
     const manifest = await fetchJSON(manifestUrl);
 
-    // Validation du manifest attendu:
-    // { mods: [ { name: string, url: string, sha256: string } ] }
     if (!manifest || !Array.isArray(manifest.mods)) {
       throw new Error('Manifest invalide (mods absent ou non tableau)');
     }
@@ -139,7 +142,6 @@ async function downloadModsFromManifest(manifestUrl, event) {
 
       if (event) event.sender.send('launcher-progress', progress);
 
-      // Check if file exists and validate checksum
       if (fs.existsSync(targetPath)) {
         const fileHash = sha256File(targetPath);
         if (fileHash === mod.sha256) {
@@ -184,7 +186,7 @@ function createMainWindow() {
     show: false,
     center: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js'),
       contextIsolation: true,
       nodeIntegration: false,
       enableRemoteModule: false
@@ -206,181 +208,203 @@ function emitRendererMessage(channel, payload) {
 }
 
 function setupAutoUpdater() {
-  if (process.env.NODE_ENV === 'development') {
-    emitRendererMessage('launcher-debug', '🛠️ Auto-update désactivée en mode développement.');
-    return;
+  // electron-updater désactivé temporairement
+  if (app && mainWindow) {
+    emitRendererMessage('launcher-debug', '✅ Auto-update désactivée (électron-updater non installé).');
   }
-
-  autoUpdater.autoDownload = true;
-  autoUpdater.allowPrerelease = false;
-
-  autoUpdater.on('checking-for-update', () => {
-    emitRendererMessage('launcher-debug', '🔎 Vérification des mises à jour...');
-  });
-
-  autoUpdater.on('update-available', (info) => {
-    emitRendererMessage('launcher-debug', `⬇️ Mise à jour disponible : v${info.version}`);
-  });
-
-  autoUpdater.on('update-not-available', () => {
-    emitRendererMessage('launcher-debug', '✅ Aucune mise à jour disponible.');
-  });
-
-  autoUpdater.on('download-progress', (progressObj) => {
-    const transferredMb = (progressObj.transferred / (1024 * 1024)).toFixed(1);
-    const totalMb = (progressObj.total / (1024 * 1024)).toFixed(1);
-    emitRendererMessage('launcher-progress', {
-      task: 'Mise à jour',
-      percent: progressObj.percent / 100,
-      current: Number(transferredMb),
-      total: Number(totalMb)
-    });
-  });
-
-  autoUpdater.on('update-downloaded', () => {
-    emitRendererMessage('launcher-debug', '✅ Mise à jour téléchargée. Redémarrage en cours...');
-    autoUpdater.quitAndInstall(false, true);
-  });
-
-  autoUpdater.on('error', (err) => {
-    emitRendererMessage('launcher-debug', `❌ Erreur lors de la mise à jour : ${err.message || String(err)}`);
-  });
-
-  setTimeout(() => {
-    autoUpdater.checkForUpdatesAndNotify().catch((err) => {
-      emitRendererMessage('launcher-debug', `⚠️ Vérification de mise à jour impossible : ${err.message || String(err)}`);
-    });
-  }, 5000);
 }
 
-ipcMain.on('window-minimize', () => { if (mainWindow) mainWindow.minimize(); });
-ipcMain.on('window-maximize', () => { if (mainWindow) mainWindow.maximize(); });
-ipcMain.on('window-unmaximize', () => { if (mainWindow) mainWindow.unmaximize(); });
-ipcMain.on('window-toggle-maximize', () => { if (!mainWindow) return; if (mainWindow.isMaximized()) mainWindow.unmaximize(); else mainWindow.maximize(); });
-ipcMain.on('window-close', () => { if (mainWindow) mainWindow.close(); });
+if (app) {
+  app.whenReady().then(() => {
+    ensureLaunchRoot();
+    createMainWindow();
+    setupAutoUpdater();
 
-app.whenReady().then(() => {
-  ensureLaunchRoot();
-  createMainWindow();
-  setupAutoUpdater();
+    try { Menu.setApplicationMenu(null); } catch (e) {}
 
-  // remove default menu (File/Edit/View...)
-  try { Menu.setApplicationMenu(null); } catch (e) {}
+    // Window controls (must be after createMainWindow)
+    ipcMain.on('window-minimize', () => { if (mainWindow) mainWindow.minimize(); });
+    ipcMain.on('window-maximize', () => { if (mainWindow) mainWindow.maximize(); });
+    ipcMain.on('window-unmaximize', () => { if (mainWindow) mainWindow.unmaximize(); });
+    ipcMain.on('window-toggle-maximize', () => { if (!mainWindow) return; if (mainWindow.isMaximized()) mainWindow.unmaximize(); else mainWindow.maximize(); });
+    ipcMain.on('window-close', () => { if (mainWindow) mainWindow.close(); });
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createMainWindow();
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createMainWindow();
+      }
+    });
+  });
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit();
     }
   });
-});
+}
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-ipcMain.handle('installMods', async () => {
-  ensureLaunchRoot();
-  const modsResult = await installModsManifest();
-  return {
-    ...modsResult,
-    message: `${modsResult.message} Forge jar utilisé : ${fs.existsSync(WORKSPACE_FORGE_JAR) ? 'oui' : 'non'}`
-  };
-});
-
-ipcMain.handle('downloadModsFromManifest', async (event, manifestUrl) => {
-  ensureLaunchRoot();
-  try {
-    const result = await downloadModsFromManifest(manifestUrl, event);
-    return { ok: true, ...result };
-  } catch (err) {
-    // Ne pas throw => renderer.js gère les fallbacks tranquillement
-    return { ok: false, error: err.message || String(err), message: `Erreur téléchargement mods: ${err.message}` };
-  }
-});
-
-ipcMain.handle('checkForUpdates', async () => {
-  try {
-    const result = await autoUpdater.checkForUpdatesAndNotify();
-    return { ok: true, result };
-  } catch (error) {
-    return { ok: false, error: error.message || String(error) };
-  }
-});
-
-// Return list of background images (file:// URIs) from workspace/backgrounds
-ipcMain.handle('getBackgroundImages', async () => {
-  const dirs = [path.join(__dirname, 'backgrounds'), path.join(__dirname, 'images')];
-  let out = [];
-  for (const backgroundsDir of dirs) {
-    if (!fs.existsSync(backgroundsDir)) continue;
-    const files = fs.readdirSync(backgroundsDir).filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
-    out = out.concat(files.map((f) => 'file://' + path.join(backgroundsDir, f).replace(/\\/g, '/')));
-  }
-  return out;
-});
-
-// Return server logo path if exists
-ipcMain.handle('getServerLogo', async () => {
-  const candidates = [
-    path.join(__dirname, 'assets', 'logo.png'),
-    path.join(__dirname, 'images', 'logo.png'),
-    path.join(__dirname, 'images', 'logo.jpg'),
-    path.join(__dirname, 'images', 'logo.webp'),
-    path.join(__dirname, 'logo.png')
-  ];
-  for (const p of candidates) {
-    if (fs.existsSync(p)) return 'file://' + p.replace(/\\/g, '/');
-  }
-  return null;
-});
-
-ipcMain.handle('launchMinecraft', async (event, settings) => {
-  ensureLaunchRoot();
-  const forgePath = getForgePath();
-  const modsResult = await installModsManifest();
-
-  if (!forgePath) {
-    throw new Error('Le fichier Forge 1.20.1-47.4.10-installer.jar est introuvable dans le workspace.');
-  }
-
-  const launcher = new Client();
-  const username = settings.username || 'Player';
-  const javaPath = settings.javaPath || (process.platform === 'win32' ? 'javaw' : 'java');
-
-  const authorization = await Authenticator.getAuth(username, null);
-
-  const launchOptions = {
-    root: LAUNCH_ROOT,
-    authorization,
-    version: {
-      number: DEFAULT_VERSION,
-      type: 'release'
-    },
-    javaPath,
-    forge: forgePath,
-    memory: {
-      min: '2G',
-      max: settings.memoryMax || '4G'
-    }
-  };
-
-  return new Promise((resolve, reject) => {
-    launcher.on('debug', (message) => {
-      event.sender.send('launcher-debug', message);
-    });
-
-    launcher.on('data', (data) => {
-      event.sender.send('launcher-data', data.toString());
-    });
-
-    launcher.on('progress', (progress) => {
-      event.sender.send('launcher-progress', progress);
-    });
-
-    launcher.launch(launchOptions)
-      .then(() => resolve({ success: true, message: modsResult.message }))
-      .catch((error) => reject({ success: false, message: error.message || String(error) }));
+// Register IPC handlers outside app.whenReady for immediate availability
+if (typeof ipcMain !== 'undefined') {
+  ipcMain.handle('installMods', async () => {
+    ensureLaunchRoot();
+    const modsResult = await installModsManifest();
+    return {
+      ...modsResult,
+      message: `${modsResult.message} Forge jar utilisé : ${fs.existsSync(WORKSPACE_FORGE_JAR) ? 'oui' : 'non'}`
+    };
   });
-});
+
+  ipcMain.handle('downloadModsFromManifest', async (event, manifestUrl) => {
+    ensureLaunchRoot();
+    try {
+      const result = await downloadModsFromManifest(manifestUrl, event);
+      return { ok: true, ...result };
+    } catch (err) {
+      return { ok: false, error: err.message || String(err), message: `Erreur téléchargement mods: ${err.message}` };
+    }
+  });
+
+  ipcMain.handle('checkForUpdates', async () => {
+    return { ok: true, result: { message: 'Auto-update désactivé' } };
+  });
+
+  ipcMain.handle('getDistributionIndex', async () => {
+    return {
+      success: true,
+      data: {
+        news: [
+          {
+            title: 'Bienvenue sur Domination World !',
+            date: new Date().toISOString().split('T')[0],
+            content: 'Connectez-vous et découvrez notre serveur Minecraft avec plus de 70 mods !'
+          }
+        ],
+        servers: [
+          {
+            name: 'Domination World',
+            ip: 'play.domination-world.fr',
+            port: 25565,
+            players: {
+              online: Math.floor(Math.random() * 20),
+              max: 50
+            }
+          }
+        ]
+      }
+    };
+  });
+
+  ipcMain.handle('getModsList', async () => {
+    const modsFolder = path.join(LAUNCH_ROOT, 'mods');
+    if (fs.existsSync(modsFolder)) {
+      const mods = fs.readdirSync(modsFolder).filter(file => file.endsWith('.jar'));
+      return { success: true, mods };
+    }
+    return { success: true, mods: [] };
+  });
+
+  ipcMain.handle('launchMinecraft', async (event, settings) => {
+    console.log('=== MAIN: launchMinecraft appelé ===');
+    console.log('Settings:', settings);
+    
+    try {
+      ensureLaunchRoot();
+      const forgePath = getForgePath();
+      
+      console.log('Forge path:', forgePath);
+      console.log('Forge exists:', forgePath ? fs.existsSync(forgePath) : false);
+      
+      if (!forgePath) {
+        console.error('Forge jar introuvable');
+        return { success: false, message: 'Forge jar introuvable' };
+      }
+
+      console.log('Creating launcher...');
+      const launcher = new Client();
+      const username = settings.username || 'Player';
+      const javaPath = settings.javaPath || (process.platform === 'win32' ? 'javaw' : 'java');
+
+      console.log('Username:', username);
+      console.log('Java path:', javaPath);
+
+      // Simple offline authentication
+      const uuid = crypto.createHash('md5').update(username).digest('hex').substring(0, 32);
+      console.log('Generated UUID:', uuid);
+      
+      const authorization = {
+        access_token: '0',
+        client_token: '0',
+        uuid: uuid,
+        name: username,
+        user_type: 'mojang',
+        meta: { type: 'offline', xuid: '0' }
+      };
+      
+      console.log('Authorization:', authorization);
+      
+      const launchOptions = {
+        root: LAUNCH_ROOT,
+        authorization,
+        version: { number: DEFAULT_VERSION, type: 'release' },
+        javaPath,
+        forge: forgePath,
+        memory: { min: '2G', max: settings.memoryMax || '4G' },
+        customArgs: ['--width=1280', '--height=720']
+      };
+      
+      console.log('Launch options:', launchOptions);
+
+      launcher.on('debug', (message) => {
+        console.log('[DEBUG]', message);
+        event.sender.send('launcher-debug', message);
+      });
+
+      launcher.on('data', (data) => {
+        console.log('[DATA]', data.toString());
+        event.sender.send('launcher-data', data.toString());
+      });
+
+      launcher.on('progress', (progress) => {
+        console.log('[PROGRESS]', progress);
+        event.sender.send('launcher-progress', progress);
+      });
+
+      console.log('Launching...');
+      await launcher.launch(launchOptions);
+      console.log('Launch successful');
+      return { success: true, message: 'Minecraft lancé' };
+      
+    } catch (error) {
+      console.error('=== ERREUR LANCEMENT ===');
+      console.error('Error:', error);
+      console.error('Message:', error.message);
+      console.error('Stack:', error.stack);
+      return { success: false, message: error.message || String(error) };
+    }
+  });
+
+  ipcMain.handle('getBackgroundImages', async () => {
+    const dirs = [path.join(__dirname, 'backgrounds'), path.join(__dirname, 'images')];
+    let out = [];
+    for (const backgroundsDir of dirs) {
+      if (!fs.existsSync(backgroundsDir)) continue;
+      const files = fs.readdirSync(backgroundsDir).filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
+      out = out.concat(files.map((f) => 'file://' + path.join(backgroundsDir, f).replace(/\\/g, '/')));
+    }
+    return out;
+  });
+
+  ipcMain.handle('getServerLogo', async () => {
+    const candidates = [
+      path.join(__dirname, 'assets', 'logo.png'),
+      path.join(__dirname, 'images', 'logo.png'),
+      path.join(__dirname, 'images', 'logo.jpg'),
+      path.join(__dirname, 'images', 'logo.webp'),
+      path.join(__dirname, 'logo.png')
+    ];
+    for (const p of candidates) {
+      if (fs.existsSync(p)) return 'file://' + p.replace(/\\/g, '/');
+    }
+    return null;
+  });
+}

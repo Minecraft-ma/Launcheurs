@@ -2,246 +2,202 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Launcher Minecraft Forge 1.20.1</title>
+  <title>Domination World</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
-      --primary: #3b82f6;
-      --primary-dark: #2563eb;
-      --secondary: #60a5fa;
-      --accent: #0ea5e9;
-      --bg-dark: #0c1929;
-      --bg-card: rgba(15, 23, 42, 0.85);
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --error: #ef4444;
+      --bg-primary: #080c14;
+      --bg-secondary: #0d1420;
+      --bg-card: #111b2b;
+      --bg-input: #0a1018;
+      --bg-hover: rgba(255, 255, 255, 0.03);
+      --border: #1e2d40;
+      --border-hover: #2d4a6f;
+      --text-primary: #e8edf5;
+      --text-secondary: #8899b0;
+      --text-muted: #556677;
+      --accent: #4a9eff;
+      --accent-hover: #3b82f6;
+      --accent-glow: rgba(74, 158, 255, 0.12);
+      --accent-border: rgba(74, 158, 255, 0.25);
+      --success: #34d399;
+      --warning: #fbbf24;
+      --error: #f87171;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+      --transition: all 0.15s ease;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg-dark);
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
       color: var(--text-primary);
-      overflow: hidden;
-    }
-
-    #background {
-      position: fixed;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.35) saturate(1.4) contrast(1.1);
-      transition: background-image 2.5s ease-in-out;
-      z-index: 0;
-    }
-
-    #overlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(12, 25, 41, 0.88) 0%, rgba(15, 23, 42, 0.82) 50%, rgba(30, 58, 138, 0.75) 100%);
-      backdrop-filter: blur(20px);
-      z-index: 1;
-    }
-
-    #ui {
-      position: relative;
-      z-index: 10;
       height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     header {
+      height: 42px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      -webkit-app-region: drag;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .logo-icon {
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg { width: 12px; height: 12px; fill: white; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      -webkit-app-region: no-drag;
+    }
+
+    .version-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-muted);
+    }
+
+    .window-controls { display: flex; gap: 2px; margin-left: 8px; }
+
+    .window-btn {
+      width: 30px;
+      height: 26px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .window-btn svg { width: 10px; height: 10px; fill: currentColor; }
+    .window-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .window-btn.close:hover { background: var(--error); color: white; }
+
+    main { flex: 1; display: flex; overflow: hidden; }
+
+    .left-panel {
+      width: 250px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      flex-shrink: 0;
+    }
+
+    .player-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .player-card::before {
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #7c3aed);
+    }
+
+    .player-avatar {
+      width: 68px;
       height: 68px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-      -webkit-app-region: drag;
-      z-index: 20;
-      background: rgba(12, 25, 41, 0.7);
-      backdrop-filter: blur(30px) saturate(1.2);
-      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
-      box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
-    }
-
-    .logo-section {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    #serverLogo {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      object-fit: cover;
-      border: 2px solid rgba(59, 130, 246, 0.5);
-      background: rgba(59, 130, 246, 0.15);
-      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
-      transition: all 0.3s ease;
-    }
-
-    #serverLogo:hover {
-      transform: scale(1.08);
-      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.45);
-    }
-
-    #serverName {
-      font-size: 20px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
-      letter-spacing: 0.5px;
-    }
-
-    .window-controls {
-      display: flex;
-      gap: 10px;
-      -webkit-app-region: no-drag;
-    }
-
-    .window-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      border: none;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-secondary);
-      cursor: pointer;
+      background: var(--bg-input);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      margin: 0 auto 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      font-weight: 600;
-      transition: all 0.2s ease;
+      overflow: hidden;
+      image-rendering: pixelated;
+      transition: var(--transition);
     }
 
-    .window-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: var(--text-primary);
-      transform: translateY(-2px);
-    }
+    .player-avatar:hover { border-color: var(--accent); transform: scale(1.02); }
+    .player-avatar img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+    .player-avatar.empty svg { width: 28px; height: 28px; fill: var(--text-muted); }
 
-    .window-btn.close:hover {
-      background: var(--error);
-      color: white;
-      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-    }
+    .player-name { font-size: 15px; font-weight: 700; }
 
-    .hint-text {
-      margin: 18px auto 0;
-      max-width: 440px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      line-height: 1.5;
-      letter-spacing: 0.02em;
-      text-align: center;
-    }
-
-    .action-btn.primary {
-      width: calc(100% - 40px);
-      max-width: 420px;
-      margin: 24px auto 0;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.92) 0%, rgba(14, 165, 233, 0.95) 100%);
-      border-color: rgba(255, 255, 255, 0.16);
-      color: #fff;
-      box-shadow: 0 22px 50px rgba(14, 165, 233, 0.28);
-    }
-
-    .glass-card {
-      background: rgba(15, 23, 42, 0.78);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(24px);
-      border-radius: 32px;
-      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.28);
-      padding: 32px;
-      width: 100%;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .glass-card .hero-header {
-      text-align: left;
-      margin-bottom: 28px;
-    }
-
-    .glass-card .hero-header h2 {
-      font-size: 34px;
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-      margin-bottom: 14px;
-      max-width: 600px;
-      color: #f8fafc;
-    }
-
-    .glass-card .hero-header p {
-      max-width: 560px;
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.75;
-    }
-
-    .action-btn.primary:hover {
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.96) 0%, rgba(14, 165, 233, 1) 100%);
-      transform: translateY(-3px);
-    }
-
-    main {
-      flex: 1;
+    .player-status {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 120px 24px 28px;
+      gap: 5px;
     }
 
-    #center {
-      text-align: center;
-      width: min(100%, 860px);
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .modal-card {
-      min-width: auto;
-      width: 100%;
-      max-width: 780px;
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
     }
 
     #playButton {
       width: 100%;
-      max-width: 420px;
-      height: 68px;
-      margin: 0 auto;
-      border-radius: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: 2px;
+      height: 46px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: var(--accent);
       color: white;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
       cursor: pointer;
+      margin-bottom: 14px;
       -webkit-app-region: no-drag;
-      background: linear-gradient(135deg, rgba(96, 165, 250, 0.92) 0%, rgba(14, 165, 233, 0.98) 100%);
-      backdrop-filter: blur(22px);
-      box-shadow: 0 24px 50px rgba(14, 165, 233, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-      transform: translateY(0);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: var(--transition);
       position: relative;
       overflow: hidden;
     }
@@ -250,662 +206,1117 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 50%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+      pointer-events: none;
     }
 
-    #playButton:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 30px 60px rgba(59, 130, 246, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-      border-color: rgba(59, 130, 246, 0.5);
+    #playButton:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px var(--accent-glow), var(--shadow-md);
     }
 
-    #playButton:hover::before {
-      opacity: 1;
+    #playButton:active:not(:disabled) { transform: translateY(0); }
+
+    #playButton:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
-    .hero-panels {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 28px;
-      text-align: left;
+    #playButton.launching {
+      background: linear-gradient(90deg, var(--accent), #7c3aed);
+      animation: pulseBtn 1.5s ease-in-out infinite;
     }
 
-    .hero-card {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      overflow: hidden;
-      min-height: 220px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
-      transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    @keyframes pulseBtn {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
 
-    .hero-card:hover {
-      transform: translateY(-8px);
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(59, 130, 246, 0.28);
-    }
-
-    .hero-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .hero-card h4 {
-      margin: 18px 20px 8px;
-      font-size: 18px;
-      font-weight: 800;
-      color: #eff6ff;
-    }
-
-    .hero-card p {
-      margin: 0 20px 22px;
-      color: #cbd5e1;
-      line-height: 1.6;
-      font-size: 14px;
+    .server-info {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 11px;
       flex: 1;
     }
 
-    @media (max-width: 860px) {
-      .hero-panels {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    #playButton:active {
-      transform: translateY(-2px);
-    }
-
-    /* Glowing sweep animation */
-    #playButton::after {
-      content: "";
-      position: absolute;
-      inset: -80% -50%;
-      background: linear-gradient(120deg,
-        rgba(255,255,255,0) 35%,
-        rgba(59, 130, 246, 0.4) 50%,
-        rgba(14, 165, 233, 0.5) 58%,
-        rgba(255,255,255,0) 70%);
-      transform: translateX(-30%) rotate(10deg);
-      animation: playGlowSweep 2.5s ease-in-out infinite;
-      pointer-events: none;
-      mix-blend-mode: screen;
-      filter: blur(10px);
-      opacity: 0.9;
-    }
-
-    @keyframes playGlowSweep {
-      0%   { transform: translateX(-45%) rotate(10deg); opacity: 0.0; }
-      10%  { opacity: 0.9; }
-      50%  { transform: translateX(12%) rotate(10deg); opacity: 1.0; }
-      90%  { opacity: 0.9; }
-      100% { transform: translateX(50%) rotate(10deg); opacity: 0.0; }
-    }
-
-    #playButton.play-ripple::after {
-      animation: playRipple 600ms ease-out;
-    }
-
-    @keyframes playRipple {
-      0% { opacity: 0.0; transform: translate(-50%,-50%) scale(0.1); box-shadow: 0 0 0 0 rgba(95,176,255,0.4); }
-      10% { opacity: 1.0; }
-      100% { opacity: 0.0; transform: translate(-50%,-50%) scale(20); box-shadow: 0 0 0 20px rgba(95,176,255,0); }
-    }
-
-    #subrow {
-      margin-top: 24px;
+    .server-info-row {
       display: flex;
-      gap: 16px;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #username {
-      padding: 14px 20px;
-      border-radius: 14px;
-      border: 2px solid rgba(59, 130, 246, 0.2);
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(15px);
-      color: var(--text-primary);
-      font-size: 15px;
-      font-weight: 600;
-      -webkit-app-region: no-drag;
-      transition: all 0.3s ease;
-      width: 180px;
-    }
-
-    #username:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: rgba(15, 23, 42, 0.85);
-      box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
-    }
-
-    .memory-control {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(15px);
-      padding: 10px 16px;
-      border-radius: 14px;
-      border: 2px solid rgba(59, 130, 246, 0.2);
-      -webkit-app-region: no-drag;
-    }
-
-    .memory-slider {
-      width: 120px;
-      height: 6px;
-      -webkit-appearance: none;
-      appearance: none;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-    }
-
-    .memory-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-      transition: all 0.2s ease;
-    }
-
-    .memory-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
-    }
-
-    .memory-value {
-      font-weight: 700;
-      color: var(--accent);
-      min-width: 45px;
-      text-align: center;
-    }
-
-    .action-btn {
-      padding: 14px 24px;
-      border-radius: 14px;
-      border: 2px solid rgba(59, 130, 246, 0.2);
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(15px);
-      color: var(--text-primary);
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      -webkit-app-region: no-drag;
-      transition: all 0.3s ease;
-    }
-
-    .action-btn:hover {
-      border-color: var(--primary);
-      background: rgba(59, 130, 246, 0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
-    }
-
-    .action-btn:active {
-      transform: translateY(-1px);
-    }
-
-    #tabs {
-      position: absolute;
-      top: 68px;
-      left: 0;
-      right: 0;
-      z-index: 40;
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      padding: 16px 32px;
-      background: rgba(12, 25, 41, 0.65);
-      backdrop-filter: blur(30px) saturate(1.2);
-      border-bottom: 1px solid rgba(59, 130, 246, 0.12);
-      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
-      pointer-events: auto;
-    }
-
-    .tab-btn {
-      -webkit-app-region: no-drag;
-      cursor: pointer;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.05);
+      justify-content: space-between;
+      padding: 6px 0;
       color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 700;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      pointer-events: auto;
-      touch-action: manipulation;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
     }
 
-    .tab-btn:hover {
-      color: var(--text-primary);
-      background: rgba(59, 130, 246, 0.15);
-      border-color: rgba(59, 130, 246, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-    }
+    .server-info-row:last-child { border-bottom: none; }
+    .server-info-row span:last-child { color: var(--text-primary); font-weight: 600; }
 
-    .tab-btn.active,
-    .tab-btn[aria-selected="true"] {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      color: white;
-      border-color: rgba(59, 130, 246, 0.4);
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
-    }
-
-    .view {
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .view.active-view {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .modal-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(30px) saturate(1.2);
-      padding: 40px;
-      border-radius: 24px;
-      color: var(--text-primary);
-      min-width: 450px;
-      max-width: 90vw;
-      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.15);
-    }
-
-    .modal-card h3 {
-      margin: 0 0 24px 0;
-      color: var(--text-primary);
-      font-size: 24px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .modal-card input,
-    .modal-card select {
-      width: 100%;
-      padding: 14px 20px;
-      border-radius: 12px;
-      border: 2px solid rgba(59, 130, 246, 0.2);
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(15px);
-      color: var(--text-primary);
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      transition: all 0.3s ease;
-    }
-
-    .modal-card input:focus,
-    .modal-card select:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: rgba(15, 23, 42, 0.85);
-      box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
-    }
-
-    .modal-card button {
-      padding: 14px 28px;
-      border-radius: 12px;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(15px);
-    }
-
-    .modal-card button.primary {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      color: white;
-      border-color: rgba(59, 130, 246, 0.3);
-    }
-
-    .modal-card button.primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
-    }
-
-    .modal-card button.secondary {
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(15px);
-      color: var(--text-primary);
-    }
-
-    .modal-card button.secondary:hover {
-      background: rgba(59, 130, 246, 0.15);
-      transform: translateY(-2px);
-    }
-
-    footer {
-      padding: 20px 32px;
+    .right-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
       display: flex;
-      gap: 20px;
-      align-items: center;
-      background: rgba(12, 25, 41, 0.7);
-      backdrop-filter: blur(30px) saturate(1.2);
-      border-top: 1px solid rgba(59, 130, 246, 0.12);
-      box-shadow: 0 -8px 32px rgba(59, 130, 246, 0.1);
+      flex-direction: column;
+      gap: 12px;
     }
 
-    #status {
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: 15px;
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      transition: var(--transition);
+    }
+
+    .section:hover { border-color: var(--border-hover); }
+
+    .section-header {
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-bottom: 14px;
     }
 
-    #statusDot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 18px var(--success);
-    }
-
-    .status-busy #statusDot {
-      background: var(--warning);
-      box-shadow: 0 0 18px var(--warning);
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.2); }
-    }
-
-    #progressContainer {
+    .section-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
-      gap: 16px;
-      flex: 1;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
-    #progressStage {
+    .section-icon svg { width: 15px; height: 15px; fill: var(--accent); }
+
+    .section-title { font-size: 13px; font-weight: 700; }
+    .section-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       color: var(--text-primary);
-      font-weight: 700;
-      font-size: 15px;
-      min-width: 140px;
-    }
-
-    .progress-wrap {
-      flex: 1;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    #smallProgressBar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
-      border-radius: 4px;
-      transition: width 0.4s ease;
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-    }
-
-    #progressPercent {
-      width: 60px;
-      text-align: right;
-      color: var(--text-primary);
-      font-weight: 800;
-      font-size: 15px;
-    }
-
-    #logOutput {
-      color: var(--text-secondary);
-      max-width: 350px;
-      height: 50px;
-      overflow: auto;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(15px);
-      border-radius: 10px;
-      padding: 10px 16px;
-      white-space: pre-wrap;
-      font-family: 'Fira Code', 'Monaco', monospace;
       font-size: 13px;
-      line-height: 1.5;
-      border: 1px solid rgba(59, 130, 246, 0.1);
+      font-family: inherit;
+      transition: var(--transition);
     }
 
-    .muted {
-      color: var(--text-secondary);
-      font-size: 14px;
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    h1 {
-      position: absolute;
-      left: -9999px;
-    }
+    input[type="text"]::placeholder { color: var(--text-muted); }
 
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
+    .slider-container { display: flex; flex-direction: column; gap: 10px; }
 
-    ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 5px;
-    }
+    .slider-header { display: flex; justify-content: space-between; align-items: center; }
+    .slider-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .slider-value { font-size: 14px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .slider-row { display: flex; align-items: center; gap: 10px; }
+    .slider-bound { font-size: 10px; color: var(--text-muted); font-weight: 600; min-width: 20px; }
+    .slider-bound:last-child { text-align: right; }
 
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-    /* Range slider styling */
     input[type="range"] {
+      flex: 1;
       -webkit-appearance: none;
       appearance: none;
-      background: transparent;
-    }
-
-    input[type="range"]::-webkit-slider-runnable-track {
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      outline: none;
     }
 
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      appearance: none;
-      width: 22px;
-      height: 22px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      background: var(--accent);
       cursor: pointer;
-      margin-top: -7px;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-      transition: all 0.2s ease;
+      transition: var(--transition);
+      box-shadow: 0 1px 4px rgba(74, 158, 255, 0.4);
+      border: 2px solid white;
     }
 
     input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      transform: scale(1.2);
+      box-shadow: 0 2px 8px rgba(74, 158, 255, 0.6);
     }
+
+    .slider-info { font-size: 11px; color: var(--text-muted); }
+
+    .ram-warning {
+      font-size: 11px;
+      color: var(--warning);
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ram-warning.visible { display: flex; }
+    .ram-warning svg { width: 12px; height: 12px; fill: var(--warning); }
+
+    .skin-upload { display: flex; align-items: center; gap: 14px; }
+
+    .skin-preview {
+      width: 60px;
+      height: 60px;
+      background: var(--bg-input);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      image-rendering: pixelated;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .skin-preview:hover { border-color: var(--accent); background: var(--accent-glow); }
+    .skin-preview.drag-over { border-color: var(--accent); background: var(--accent-glow); transform: scale(1.05); }
+    .skin-preview img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+    .skin-preview.empty svg { width: 22px; height: 22px; fill: var(--text-muted); }
+
+    .skin-actions { flex: 1; }
+    .skin-hint { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+
+    .btn {
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn svg { width: 13px; height: 13px; fill: currentColor; }
+
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); border-color: var(--border-hover); }
+
+    .btn-danger {
+      background: rgba(248, 113, 113, 0.08);
+      color: var(--error);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+    .btn-danger:hover:not(:disabled) { background: var(--error); color: white; }
+
+    .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .mods-search { margin-bottom: 10px; position: relative; }
+    .mods-search svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      fill: var(--text-muted);
+    }
+
+    .mods-search input {
+      width: 100%;
+      padding: 8px 12px 8px 32px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    .mods-search input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .mods-container {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      transition: var(--transition);
+    }
+
+    .mods-container.drag-over { border-color: var(--accent); background: var(--accent-glow); }
+    .mods-container.loading { opacity: 0.6; pointer-events: none; }
+
+    .mod-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      transition: var(--transition);
+    }
+
+    .mod-item:hover { background: var(--bg-hover); }
+    .mod-item:last-child { border-bottom: none; }
+
+    .mod-info { flex: 1; min-width: 0; }
+
+    .mod-name {
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mod-size { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+    .mod-delete {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 4px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+    }
+
+    .mod-item:hover .mod-delete { opacity: 1; }
+    .mod-delete:hover { color: var(--error); background: rgba(248, 113, 113, 0.1); }
+    .mod-delete svg { width: 13px; height: 13px; fill: currentColor; }
+
+    .empty-state { padding: 24px; text-align: center; color: var(--text-muted); font-size: 12px; }
+    .mods-drop-hint { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+
+    footer {
+      height: 36px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 10px;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    .footer-status { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); min-width: 120px; }
+
+    .status-indicator-footer {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      transition: var(--transition);
+    }
+
+    .status-indicator-footer.busy { background: var(--warning); animation: pulse 1.2s ease-in-out infinite; }
+    .status-indicator-footer.error { background: var(--error); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .progress-container { flex: 1; display: flex; align-items: center; gap: 10px; }
+    .progress-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), #7c3aed);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .progress-text { color: var(--text-muted); min-width: 110px; font-size: 10px; }
+    .progress-percent { font-weight: 700; color: var(--accent); min-width: 30px; text-align: right; font-variant-numeric: tabular-nums; }
+
+    .toast-container {
+      position: fixed;
+      top: 50px;
+      right: 16px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideIn 0.2s ease;
+      max-width: 320px;
+    }
+
+    .toast.success { border-left: 3px solid var(--success); }
+    .toast.error { border-left: 3px solid var(--error); }
+    .toast.info { border-left: 3px solid var(--accent); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
   </style>
 </head>
 <body>
-  <div id="background"></div>
-  <div id="overlay"></div>
-  
-  <div id="ui">
-    <header>
-      <div class="logo-section">
-        <img id="serverLogo" src="images/logo.png" alt="Logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>'" />
-        <div id="serverName">Domination World</div>
+  <header>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
+      <span>Domination World</span>
+    </div>
+    <div class="header-right">
+      <span class="version-badge" id="versionBadge">v1.0.0</span>
       <div class="window-controls">
-        <button class="window-btn" id="minBtn">−</button>
-        <button class="window-btn close" id="closeBtn">×</button>
+        <button class="window-btn" id="minBtn" title="Réduire">
+          <svg viewBox="0 0 12 12"><rect y="5" width="12" height="2" rx="1"/></svg>
+        </button>
+        <button class="window-btn close" id="closeBtn" title="Fermer">
+          <svg viewBox="0 0 12 12"><path d="M1.4 0L0 1.4 4.6 6 0 10.6 1.4 12 6 7.4 10.6 12 12 10.6 7.4 6 12 1.4 10.6 0 6 4.6z"/></svg>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <div id="tabs">
-      <button type="button" class="tab-btn" data-view="accueil" role="tab" aria-selected="true">Accueil</button>
-      <button type="button" class="tab-btn" data-view="options" role="tab" aria-selected="false">Options</button>
-      <button type="button" class="tab-btn" data-view="mods" role="tab" aria-selected="false">Mods</button>
-      <button type="button" class="tab-btn" data-view="logs" role="tab" aria-selected="false">Logs</button>
-      <button type="button" class="tab-btn" data-view="apropos" role="tab" aria-selected="false">À propos</button>
+  <main>
+    <div class="left-panel">
+      <div class="player-card">
+        <div class="player-avatar empty" id="playerSkin">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+        <div class="player-name" id="playerName">Player</div>
+        <div class="player-status">
+          <span class="status-dot"></span>
+          Hors-ligne
+        </div>
+      </div>
+
+      <button id="playButton">🎮 JOUER</button>
+
+      <div class="server-info">
+        <div class="server-info-row"><span>Serveur</span><span>Domination World</span></div>
+        <div class="server-info-row"><span>Version</span><span>Forge 1.20.1</span></div>
+        <div class="server-info-row"><span>Mods</span><span id="modCount">0</span></div>
+        <div class="server-info-row"><span>RAM</span><span id="ramDisplay">4 Go</span></div>
+      </div>
     </div>
 
-    <main>
-      <div id="center">
-        <div id="viewAccueil" class="view active-view">
-          <div class="glass-card">
-            <div class="hero-header">
-              <h2>Launcher Minecraft Forge 1.20.1 — Mod install GitHub only</h2>
-              <p>Utilisez un seul flux d’installation fiable : le manifest git release. Supprimez les anciennes dépendances locales et lancez votre client sans surcharge.</p>
-            </div>
-
-            <button type="button" id="playButton">JOUER</button>
-            <div id="subrow">
-              <input id="username" type="text" placeholder="Pseudo" value="Player" />
-              <div class="memory-control">
-                <input type="range" id="memorySlider" class="memory-slider" min="2" max="16" value="4" step="1" />
-                <span id="memoryValue" class="memory-value">4G</span>
-              </div>
-            </div>
-
-            <button type="button" id="installMods" class="action-btn primary">Installer les mods GitHub</button>
-            <div class="hint-text">Aucune installation locale utilisée — le manifest GitHub est la seule source.</div>
-
-            <div class="hero-panels">
-            <article class="hero-card">
-              <img src="images/Image1.png" alt="Aperçu des mods" />
-              <h4>Mods du serveur</h4>
-              <p>Installe rapidement la sélection de mods à jour depuis GitHub, sans recourir à des fichiers locaux.</p>
-            </article>
-            <article class="hero-card">
-              <img src="images/Image2.png" alt="Lancement Minecraft" />
-              <h4>Lancement amélioré</h4>
-              <p>Choisis ton pseudo, ta mémoire et lance Minecraft Forge 1.20.1 en un clic.</p>
-            </article>
+    <div class="right-panel">
+      
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <div>
+            <div class="section-title">Pseudo</div>
+            <div class="section-subtitle">Ton nom en jeu</div>
           </div>
         </div>
+        <input type="text" id="username" placeholder="Entre ton pseudo..." maxlength="16" autocomplete="off" spellcheck="false">
+      </div>
 
-        <div id="viewOptions" class="view">
-          <div class="modal-card">
-            <h3>Options</h3>
-            <div class="muted">Configurez vos préférences de jeu.</div>
-            <div style="margin-top: 24px;">
-              <label style="display: block; margin-bottom: 10px; font-weight: 700;">Nom d'utilisateur</label>
-              <input id="optUsername" type="text" placeholder="Player" />
-              
-              <label style="display: block; margin-bottom: 10px; font-weight: 700; margin-top: 20px;">Mémoire RAM</label>
-              <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
-                <input type="range" id="optMemorySlider" min="2" max="16" value="4" step="1" style="flex: 1;" />
-                <span id="optMemoryValue" style="font-weight: 700; color: var(--accent); min-width: 50px;">4G</span>
-              </div>
-              
-              <div style="margin-top: 24px; display: flex; gap: 16px;">
-                <button type="button" id="optSave" class="secondary">Sauvegarder</button>
-                <button type="button" id="optApply" class="primary">Appliquer</button>
-              </div>
-              <div style="margin-top:16px; display:flex; align-items:center; gap:10px;">
-                <input id="optOnline" type="checkbox" />
-                <label for="optOnline" style="font-weight:700;">Mode en ligne (auth Mojang/Microsoft)</label>
-              </div>
-
-              <div style="margin-top:24px; display:flex; align-items:center; gap:10px;">
-                <input id="optAutoUpdate" type="checkbox" />
-                <label for="optAutoUpdate" style="font-weight:700;">Activer auto-update du launcher</label>
-              </div>
-
-              <div style="margin-top:20px; display:flex; align-items:center; gap:12px; flex-wrap: wrap;">
-                <label style="font-weight:700; min-width: 150px;">Intervalle vérif.</label>
-                <input id="optUpdateInterval" type="number" min="1" max="168" value="24" style="width: 90px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.8); color: var(--text-primary);" />
-                <span style="color: var(--text-secondary);">heures</span>
-              </div>
-
-              <div id="updateConfigStatus" class="muted" style="margin-top:16px;">Configuration de mise à jour non chargée.</div>
-            </div>
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          </div>
+          <div>
+            <div class="section-title">Skin</div>
+            <div class="section-subtitle">Apparence de ton personnage</div>
           </div>
         </div>
-
-        <div id="viewMods" class="view">
-          <div class="modal-card">
-            <h3>Mods</h3>
-            <div class="muted">Gestion des mods du serveur (68 mods disponibles)</div>
-            <div style="margin-top: 24px;">
-              <button type="button" id="refreshMods" class="action-btn">Rafraîchir</button>
-              <pre id="modsList" style="margin-top: 16px; max-height: 250px; overflow: auto; background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.1);"></pre>
+        <div class="skin-upload">
+          <div class="skin-preview empty" id="skinPreview">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <div class="skin-actions">
+            <div class="btn-group">
+              <button class="btn btn-primary" id="uploadSkinBtn">
+                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+                Changer
+              </button>
+              <button class="btn btn-secondary" id="resetSkinBtn">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Défaut
+              </button>
             </div>
+            <div class="skin-hint">PNG 64x64 - Glisser-déposer accepté</div>
+          </div>
+          <input type="file" id="skinFileInput" accept="image/png" style="display:none">
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/></svg>
+          </div>
+          <div>
+            <div class="section-title">Mémoire RAM</div>
+            <div class="section-subtitle">Ressources allouées au jeu</div>
           </div>
         </div>
-
-        <div id="viewLogs" class="view">
-          <div class="modal-card">
-            <h3>Logs</h3>
-            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 16px;">
-              <button type="button" id="clearLogs" class="action-btn">Effacer</button>
-            </div>
-            <pre id="logOutputFull" style="max-height: 350px; overflow: auto; background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.1);"></pre>
+        <div class="slider-container">
+          <div class="slider-header">
+            <span class="slider-label">Quantité de mémoire</span>
+            <span class="slider-value" id="ramValue">4 Go</span>
           </div>
-        </div>
-
-        <div id="viewApropos" class="view">
-          <div class="modal-card">
-            <h3>À propos</h3>
-            <div class="muted">Launcher Minecraft Forge 1.20.1 - Domination World</div>
-            <div style="margin-top: 24px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: rgba(59, 130, 246, 0.08); border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(59, 130, 246, 0.15);">
-                <span>Version actuelle:</span>
-                <span id="currentVersion" style="font-weight: 800; color: var(--accent);">Chargement...</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: rgba(59, 130, 246, 0.08); border-radius: 12px; margin-bottom: 16px; border: 1px solid rgba(59, 130, 246, 0.15);">
-                <span>Dernière version:</span>
-                <span id="latestVersion" style="font-weight: 800; color: var(--accent);">Vérification...</span>
-              </div>
-              <button type="button" id="checkUpdateBtn" class="action-btn" style="width: 100%; margin-top: 16px;">Vérifier les mises à jour</button>
-            </div>
+          <div class="slider-row">
+            <span class="slider-bound">1</span>
+            <input type="range" id="ramSlider" min="1" max="16" step="1" value="4">
+            <span class="slider-bound" id="ramMax">16</span>
+          </div>
+          <div class="slider-info">Recommandé : 4 à 8 Go pour un serveur moddé</div>
+          <div class="ram-warning" id="ramWarning">
+            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            <span>Attention : valeur élevée pour ton système</span>
           </div>
         </div>
       </div>
-    </main>
 
-    <footer>
-      <div id="status" class="status-busy"><span id="statusDot"></span>✨ Prêt à jouer</div>
-      <div id="progressContainer">
-        <div id="progressStage">Prêt</div>
-        <div class="progress-wrap"><div id="smallProgressBar"></div></div>
-        <div id="progressPercent">0%</div>
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+          </div>
+          <div>
+            <div class="section-title">Mods</div>
+            <div class="section-subtitle">Gère tes mods installés</div>
+          </div>
+        </div>
+
+        <div class="mods-search">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" id="modsSearch" placeholder="Rechercher un mod...">
+        </div>
+        
+        <div class="mods-container" id="modsList">
+          <div class="empty-state">Chargement...</div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" id="installModsBtn">
+            <svg viewBox="0 0 24 24"><path d="M12 5v10m5-5H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Installer mods GitHub
+          </button>
+          <button class="btn btn-primary" id="importModsBtn">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Ajouter
+          </button>
+          <button class="btn btn-secondary" id="openModsFolderBtn">
+            <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+            Dossier
+          </button>
+          <button class="btn btn-danger" id="clearModsBtn">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            Vider
+          </button>
+        </div>
+        <input type="file" id="modsFileInput" accept=".jar" multiple style="display:none">
+        <div class="mods-drop-hint">Glisse-dépose des fichiers .jar ici</div>
       </div>
-      <pre id="logOutput"></pre>
-    </footer>
-  </div>
 
-  <script src="renderer.js"></script>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-status">
+      <div class="status-indicator-footer" id="statusDot"></div>
+      <span id="statusText">Prêt</span>
+    </div>
+    <div class="progress-container">
+      <span class="progress-text" id="progressText">En attente</span>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="progress-percent" id="progressPercent">0%</span>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // ===== UTILITIES =====
+    const api = window.launcherApi;
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatSize(bytes) {
+      if (!bytes && bytes !== 0) return '-';
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'slideOut 0.2s ease forwards';
+        setTimeout(() => toast.remove(), 200);
+      }, 4000);
+    }
+
+    function appendLog(message) {
+      console.log('[Launcher]', message);
+    }
+
+    const MODS_MANIFEST_URLS = [
+      'https://github.com/Minecraft-ma/DominationRoot/releases/download/mods-v1/mods.json',
+      'https://raw.githubusercontent.com/Minecraft-ma/DominationRoot/main/mods.json'
+    ];
+
+    async function installMods() {
+      if (!installModsBtn) return;
+      installModsBtn.disabled = true;
+      updateStatus('Installation des mods...');
+      progressText.textContent = 'Installation des mods';
+      progressFill.style.width = '10%';
+      try {
+        if (!api?.downloadModsFromManifest) {
+          throw new Error('API downloadModsFromManifest non disponible');
+        }
+
+        let result = null;
+        for (const manifestUrl of MODS_MANIFEST_URLS) {
+          result = await api.downloadModsFromManifest(manifestUrl);
+          if (result?.ok) {
+            break;
+          }
+          appendLog(`Échec manifest: ${result?.error || result?.message || 'Erreur inconnue'}`);
+        }
+
+        if (!result?.ok) {
+          throw new Error(result?.error || result?.message || 'Impossible d\'installer les mods');
+        }
+
+        showToast(result.message || 'Mods installés', 'success');
+        updateStatus('Mods installés');
+        progressFill.style.width = '100%';
+        await loadMods();
+      } catch (error) {
+        console.error('installMods error:', error);
+        showToast(error.message || String(error), 'error');
+        updateStatus('Erreur installation mods');
+        progressFill.style.width = '0%';
+      } finally {
+        installModsBtn.disabled = false;
+      }
+    }
+
+    // ===== ELEMENTS =====
+    const ramSlider = document.getElementById('ramSlider');
+    const ramMaxLabel = document.getElementById('ramMax');
+    const ramWarning = document.getElementById('ramWarning');
+    const usernameInput = document.getElementById('username');
+    const playerName = document.getElementById('playerName');
+    const playerSkin = document.getElementById('playerSkin');
+    const skinPreview = document.getElementById('skinPreview');
+    const uploadSkinBtn = document.getElementById('uploadSkinBtn');
+    const resetSkinBtn = document.getElementById('resetSkinBtn');
+    const skinFileInput = document.getElementById('skinFileInput');
+    const ramValue = document.getElementById('ramValue');
+    const ramDisplay = document.getElementById('ramDisplay');
+    const playButton = document.getElementById('playButton');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const progressPercent = document.getElementById('progressPercent');
+    const modsList = document.getElementById('modsList');
+    const installModsBtn = document.getElementById('installModsBtn');
+    const importModsBtn = document.getElementById('importModsBtn');
+    const modsFileInput = document.getElementById('modsFileInput');
+    const openModsFolderBtn = document.getElementById('openModsFolderBtn');
+    const clearModsBtn = document.getElementById('clearModsBtn');
+    const modCount = document.getElementById('modCount');
+    const modsSearch = document.getElementById('modsSearch');
+    const versionBadge = document.getElementById('versionBadge');
+
+    let maxRam = 16;
+    let mods = [];
+    let isLaunching = false;
+
+    // ===== LISTENERS IPC (depuis main.js) =====
+    if (api) {
+      api.onDebug?.((msg) => {
+        appendLog(msg);
+      });
+
+      api.onData?.((data) => {
+        appendLog(data);
+      });
+
+      api.onProgress?.((payload) => {
+        if (payload && typeof payload === 'object' && payload.percent != null) {
+          const pct = Math.round((payload.percent || 0) * 100);
+          progressText.textContent = payload.task || 'Progress';
+          progressFill.style.width = Math.min(100, pct) + '%';
+          progressPercent.textContent = Math.min(100, pct) + '%';
+          statusText.textContent = payload.task || 'En cours';
+        } else if (typeof payload === 'string') {
+          statusText.textContent = payload;
+        }
+      });
+
+      api.onUpdateAvailable?.((info) => {
+        showToast(`Mise à jour disponible: v${info.version}`, 'info');
+      });
+
+      api.onUpdateDownloaded?.((info) => {
+        showToast(`Mise à jour v${info.version} prête. Redémarre pour installer.`, 'success');
+      });
+
+      api.onUpdateError?.((info) => {
+        showToast(`Erreur update: ${info.error}`, 'error');
+      });
+    }
+
+    // ===== DÉTECTION RAM (async corrigé) =====
+    async function detectMaxRam() {
+      try {
+        if (api && api.getSystemRam) {
+          const ram = await api.getSystemRam();
+          if (ram && ram > 0) return Math.floor(ram);
+        }
+      } catch (e) {
+        console.warn('getSystemRam failed:', e);
+      }
+      const deviceMemory = navigator.deviceMemory;
+      if (deviceMemory && deviceMemory > 0) return Math.floor(deviceMemory);
+      return 16;
+    }
+
+    // ===== USERNAME =====
+    usernameInput.addEventListener('input', () => {
+      playerName.textContent = usernameInput.value.trim() || 'Player';
+      saveSettings();
+    });
+
+    // ===== RAM =====
+    ramSlider.addEventListener('input', () => {
+      const val = parseInt(ramSlider.value);
+      ramValue.textContent = val + ' Go';
+      ramDisplay.textContent = val + ' Go';
+      const threshold = Math.floor(maxRam * 0.75);
+      ramWarning.classList.toggle('visible', val > threshold);
+      saveSettings();
+    });
+
+    // ===== SKIN =====
+    uploadSkinBtn.addEventListener('click', () => skinFileInput.click());
+    skinPreview.addEventListener('click', () => skinFileInput.click());
+
+    skinFileInput.addEventListener('change', (e) => handleSkinFile(e.target.files[0]));
+
+    skinPreview.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      skinPreview.classList.add('drag-over');
+    });
+    skinPreview.addEventListener('dragleave', () => skinPreview.classList.remove('drag-over'));
+    skinPreview.addEventListener('drop', (e) => {
+      e.preventDefault();
+      skinPreview.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type === 'image/png') handleSkinFile(file);
+      else showToast('Format PNG uniquement', 'error');
+    });
+
+    function handleSkinFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const imgSrc = ev.target.result;
+        skinPreview.innerHTML = `<img src="${imgSrc}">`;
+        skinPreview.classList.remove('empty');
+        playerSkin.innerHTML = `<img src="${imgSrc}">`;
+        playerSkin.classList.remove('empty');
+        localStorage.setItem('launcher-skin', imgSrc);
+        showToast('Skin mis à jour', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    resetSkinBtn.addEventListener('click', () => {
+      const defaultSvg = '<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+      skinPreview.innerHTML = defaultSvg;
+      skinPreview.classList.add('empty');
+      playerSkin.innerHTML = defaultSvg;
+      playerSkin.classList.add('empty');
+      localStorage.removeItem('launcher-skin');
+      showToast('Skin réinitialisé', 'info');
+    });
+
+    // ===== MODS (via vraies API Electron) =====
+    async function loadMods() {
+      if (!api?.getModsList) {
+        renderMods();
+        return;
+      }
+      modsList.classList.add('loading');
+      try {
+        const result = await api.getModsList();
+        if (result && result.ok) {
+          mods = result.mods || [];
+        } else {
+          mods = [];
+        }
+        renderMods(modsSearch.value);
+      } catch (e) {
+        console.error('loadMods error:', e);
+        mods = [];
+        renderMods();
+      } finally {
+        modsList.classList.remove('loading');
+      }
+    }
+
+    function renderMods(filter = '') {
+      const filtered = filter
+        ? mods.filter(m => m.name.toLowerCase().includes(filter.toLowerCase()))
+        : mods;
+
+      if (filtered.length === 0) {
+        modsList.innerHTML = `<div class="empty-state">${filter ? 'Aucun résultat' : (mods.length === 0 ? 'Aucun mod installé' : 'Aucun résultat')}</div>`;
+      } else {
+        modsList.innerHTML = filtered.map((mod) => `
+          <div class="mod-item">
+            <div class="mod-info">
+              <div class="mod-name">${escapeHtml(mod.name)}</div>
+              <div class="mod-size">${formatSize(mod.size)}</div>
+            </div>
+            <button class="mod-delete" data-name="${escapeHtml(mod.name)}" title="Supprimer">
+              <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            </button>
+          </div>
+        `).join('');
+
+        modsList.querySelectorAll('.mod-delete').forEach(btn => {
+          btn.addEventListener('click', () => deleteModByName(btn.dataset.name));
+        });
+      }
+      modCount.textContent = mods.length;
+    }
+
+    async function deleteModByName(name) {
+      if (!api?.deleteMod) {
+        showToast('API deleteMod non disponible', 'error');
+        return;
+      }
+      try {
+        const result = await api.deleteMod(name);
+        if (result.ok) {
+          await loadMods();
+          showToast(`Mod "${name}" supprimé`, 'info');
+        } else {
+          showToast('Erreur: ' + (result.error || 'inconnue'), 'error');
+        }
+      } catch (e) {
+        showToast('Erreur: ' + e.message, 'error');
+      }
+    }
+
+    importModsBtn.addEventListener('click', () => modsFileInput.click());
+
+    if (installModsBtn) {
+      installModsBtn.addEventListener('click', installMods);
+    }
+
+    modsFileInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      await importModFiles(files);
+      modsFileInput.value = '';
+    });
+
+    async function importModFiles(files) {
+      const paths = files.map(f => f.path).filter(p => p && p.endsWith('.jar'));
+      if (paths.length === 0) {
+        showToast('Aucun fichier .jar valide', 'error');
+        return;
+      }
+
+      importModsBtn.disabled = true;
+      try {
+        if (api?.importMods) {
+          const result = await api.importMods(paths);
+          if (result.ok) {
+            await loadMods();
+            showToast(`${result.imported} mod(s) importé(s)`, 'success');
+          } else {
+            showToast('Erreur import', 'error');
+          }
+        } else {
+          // Fallback local (sans API Electron)
+          files.forEach(f => {
+            if (f.name.endsWith('.jar')) {
+              if (!mods.some(m => m.name === f.name)) {
+                mods.push({ name: f.name, size: f.size });
+              }
+            }
+          });
+          renderMods(modsSearch.value);
+          showToast(`${paths.length} mod(s) ajouté(s) (local)`, 'info');
+        }
+      } catch (e) {
+        showToast('Erreur: ' + e.message, 'error');
+      } finally {
+        importModsBtn.disabled = false;
+      }
+    }
+
+    modsList.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      modsList.classList.add('drag-over');
+    });
+    modsList.addEventListener('dragleave', () => modsList.classList.remove('drag-over'));
+    modsList.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      modsList.classList.remove('drag-over');
+      const files = Array.from(e.dataTransfer.files);
+      await importModFiles(files);
+    });
+
+    clearModsBtn.addEventListener('click', async () => {
+      if (mods.length === 0) return;
+      if (!confirm(`Supprimer les ${mods.length} mods ?`)) return;
+
+      clearModsBtn.disabled = true;
+      try {
+        if (api?.clearMods) {
+          const result = await api.clearMods();
+          if (result.ok) {
+            await loadMods();
+            showToast('Tous les mods supprimés', 'info');
+          } else {
+            showToast('Erreur: ' + (result.error || 'inconnue'), 'error');
+          }
+        } else {
+          mods = [];
+          renderMods();
+        }
+      } catch (e) {
+        showToast('Erreur: ' + e.message, 'error');
+      } finally {
+        clearModsBtn.disabled = false;
+      }
+    });
+
+    openModsFolderBtn.addEventListener('click', async () => {
+      if (api?.openModsFolder) {
+        try {
+          await api.openModsFolder();
+        } catch (e) {
+          showToast('Erreur: ' + e.message, 'error');
+        }
+      } else {
+        showToast('API openModsFolder non disponible', 'error');
+      }
+    });
+
+    modsSearch.addEventListener('input', () => renderMods(modsSearch.value));
+
+    // ===== WINDOW CONTROLS =====
+    document.getElementById('minBtn').addEventListener('click', () => {
+      if (api?.windowMinimize) api.windowMinimize();
+    });
+
+    document.getElementById('closeBtn').addEventListener('click', () => {
+      if (api?.windowClose) api.windowClose();
+      else window.close();
+    });
+
+    // ===== PLAY (VRAI LANCEMENT) =====
+    playButton.addEventListener('click', async () => {
+      if (isLaunching) return;
+      if (!api?.launchMinecraft) {
+        showToast('API launchMinecraft non disponible dans preload.js', 'error');
+        return;
+      }
+
+      isLaunching = true;
+      playButton.disabled = true;
+      playButton.textContent = 'LANCEMENT...';
+      playButton.classList.add('launching');
+
+      statusDot.className = 'status-indicator-footer busy';
+      statusText.textContent = 'Lancement...';
+      progressText.textContent = 'Préparation...';
+      progressFill.style.width = '5%';
+      progressPercent.textContent = '5%';
+
+      saveSettings();
+
+      const settings = {
+        username: usernameInput.value.trim() || 'Player',
+        memoryMax: ramSlider.value + 'G',
+        online: false
+      };
+
+      try {
+        const result = await api.launchMinecraft(settings);
+
+        if (result && result.success) {
+          statusDot.className = 'status-indicator-footer';
+          statusText.textContent = 'Minecraft lancé';
+          progressText.textContent = 'Terminé';
+          progressFill.style.width = '100%';
+          progressPercent.textContent = '100%';
+          showToast('Minecraft lancé avec succès !', 'success');
+        } else {
+          statusDot.className = 'status-indicator-footer error';
+          statusText.textContent = 'Erreur';
+          progressText.textContent = 'Échec';
+          progressFill.style.width = '0%';
+          progressPercent.textContent = '0%';
+          const errorMsg = result?.message || 'Échec inconnu';
+          showToast('Erreur: ' + errorMsg, 'error');
+          console.error('Launch failed:', result);
+        }
+      } catch (e) {
+        statusDot.className = 'status-indicator-footer error';
+        statusText.textContent = 'Erreur';
+        progressFill.style.width = '0%';
+        progressPercent.textContent = '0%';
+        showToast('Erreur: ' + (e.message || String(e)), 'error');
+        console.error('Launch exception:', e);
+      } finally {
+        setTimeout(() => {
+          isLaunching = false;
+          playButton.disabled = false;
+          playButton.textContent = 'JOUER';
+          playButton.classList.remove('launching');
+          statusDot.className = 'status-indicator-footer';
+          statusText.textContent = 'Prêt';
+          progressText.textContent = 'En attente';
+          progressFill.style.width = '0%';
+          progressPercent.textContent = '0%';
+        }, 2000);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && document.activeElement === usernameInput && !isLaunching) {
+        playButton.click();
+      }
+    });
+
+    // ===== SAVE/LOAD =====
+    function saveSettings() {
+      try {
+        localStorage.setItem('launcher-settings', JSON.stringify({
+          username: usernameInput.value,
+          ram: ramSlider.value
+        }));
+      } catch (e) {}
+    }
+
+    async function loadSettings() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('launcher-settings'));
+        if (saved) {
+          if (saved.username) {
+            usernameInput.value = saved.username;
+            playerName.textContent = saved.username;
+          }
+          if (saved.ram) {
+            const ram = Math.min(parseInt(saved.ram) || 4, maxRam);
+            ramSlider.value = ram;
+            ramValue.textContent = ram + ' Go';
+            ramDisplay.textContent = ram + ' Go';
+          }
+        }
+
+        const skin = localStorage.getItem('launcher-skin');
+        if (skin) {
+          skinPreview.innerHTML = `<img src="${skin}">`;
+          skinPreview.classList.remove('empty');
+          playerSkin.innerHTML = `<img src="${skin}">`;
+          playerSkin.classList.remove('empty');
+        }
+      } catch (e) {}
+    }
+
+    // ===== INIT =====
+    (async () => {
+      // 1. Détection RAM (async !)
+      maxRam = await detectMaxRam();
+      ramSlider.max = maxRam;
+      ramMaxLabel.textContent = maxRam;
+      if (parseInt(ramSlider.value) > maxRam) {
+        ramSlider.value = maxRam;
+      }
+
+      // 2. Charger settings
+      await loadSettings();
+
+      // 3. Charger les mods depuis le disque
+      await loadMods();
+
+      // 4. Charger version
+      if (api?.getAppVersion) {
+        try {
+          const v = await api.getAppVersion();
+          if (v && v.ok && versionBadge) {
+            versionBadge.textContent = 'v' + v.version;
+          }
+        } catch (e) {}
+      }
+    })();
+  </script>
 </body>
 </html>

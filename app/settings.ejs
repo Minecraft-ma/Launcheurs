@@ -1,0 +1,77 @@
+<div id="settings-view" class="view">
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>Paramètres</h1>
+            <button class="btn btn-back" id="settingsBackButton">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10 5L5 10L10 15" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M5 10H15" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+                Retour
+            </button>
+        </div>
+        
+        <div class="settings-content">
+            <div class="settings-section">
+                <h2>Paramètres Java</h2>
+                <div class="setting-item">
+                    <label class="setting-label">Mémoire allouée</label>
+                    <div class="setting-control">
+                        <input type="range" min="2" max="16" value="4" id="memorySlider">
+                        <span class="setting-value" id="memoryValue">4GB</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Chemin Java personnalisé</label>
+                    <div class="setting-control">
+                        <input type="text" placeholder="Auto-détection" id="customJavaPath">
+                        <button class="btn btn-small" id="browseJavaButton">Parcourir</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h2>Paramètres du jeu</h2>
+                <div class="setting-item">
+                    <label class="setting-label">Résolution de la fenêtre</label>
+                    <div class="setting-control">
+                        <select id="resolutionSelect">
+                            <option value="854x480">854x480 (480p)</option>
+                            <option value="1280x720">1280x720 (720p)</option>
+                            <option value="1920x1080" selected>1920x1080 (1080p)</option>
+                            <option value="2560x1440">2560x1440 (1440p)</option>
+                            <option value="3840x2160">3840x2160 (4K)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Plein écran</label>
+                    <div class="setting-control">
+                        <input type="checkbox" id="fullscreenCheckbox">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h2>Paramètres du launcher</h2>
+                <div class="setting-item">
+                    <label class="setting-label">Démarrage minimisé</label>
+                    <div class="setting-control">
+                        <input type="checkbox" id="startMinimizedCheckbox">
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">Mises à jour automatiques</label>
+                    <div class="setting-control">
+                        <input type="checkbox" id="autoUpdateCheckbox" checked>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-actions">
+                <button class="btn btn-primary" id="saveSettingsButton">Enregistrer</button>
+                <button class="btn btn-secondary" id="resetSettingsButton">Réinitialiser</button>
+            </div>
+        </div>
+    </div>
+</div>

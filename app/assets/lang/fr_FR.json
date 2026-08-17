@@ -1,0 +1,32 @@
+{
+  "index": {
+    "microsoftLoginTitle": "Connexion Microsoft",
+    "microsoftLogoutTitle": "Déconnexion Microsoft"
+  },
+  "landing": {
+    "playButton": "Jouer",
+    "newsButton": "Actualités",
+    "settingsButton": "Paramètres",
+    "loginButton": "Connexion",
+    "welcomeMessage": "Bienvenue sur Domination World",
+    "serverStatus": "Statut du serveur",
+    "playerCount": "Joueurs en ligne"
+  },
+  "login": {
+    "title": "Connexion",
+    "microsoftLogin": "Connexion Microsoft",
+    "offlineLogin": "Connexion hors ligne",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "login": "Se connecter"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "javaSettings": "Paramètres Java",
+    "memory": "Mémoire",
+    "resolution": "Résolution",
+    "customJavaPath": "Chemin Java personnalisé",
+    "gameSettings": "Paramètres du jeu",
+    "launcherSettings": "Paramètres du launcher"
+  }
+}

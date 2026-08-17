@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domination World Launcher</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #080c14; color: #e8edf5; height: 100vh; overflow: hidden; }
+        .container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
+        h1 { font-size: 32px; margin-bottom: 20px; }
+        p { margin-bottom: 15px; color: #8899b0; }
+        .btn { padding: 12px 24px; background: #4a9eff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 10px; }
+        .btn:hover { background: #3b82f6; }
+        .btn:disabled { background: #333; cursor: not-allowed; }
+        .mods-section { margin-top: 30px; padding: 20px; background: #111b2b; border-radius: 10px; max-width: 600px; }
+        .mods-list { max-height: 200px; overflow-y: auto; text-align: left; margin-top: 15px; }
+        .mod-item { padding: 8px; border-bottom: 1px solid #1e2d40; }
+        .log-output { margin-top: 20px; padding: 15px; background: #0a1018; border-radius: 8px; max-width: 600px; max-height: 150px; overflow-y: auto; text-align: left; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Domination World Launcher</h1>
+        <p>Bienvenue sur Domination World!</p>
+        <p>Interface avec système de mods</p>
+        
+        <div class="mods-section">
+            <h2>Gestion des Mods</h2>
+            <button class="btn" id="installModsBtn" onclick="installMods()">Installer les Mods</button>
+            <button class="btn" id="refreshModsBtn" onclick="refreshMods()">Rafraîchir</button>
+            
+            <div class="mods-list" id="modsList">
+                <p style="color: #556677;">Aucun mod installé</p>
+            </div>
+        </div>
+        
+        <div class="log-output" id="logOutput">
+            <p style="color: #556677;">Prêt à installer les mods...</p>
+        </div>
+    </div>
+    
+    <script>
+        console.log('Launcher chargé avec succès!');
+        
+        function log(message) {
+            const logOutput = document.getElementById('logOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            logOutput.innerHTML += `<p>[${timestamp}] ${message}</p>`;
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        async function installMods() {
+            const installBtn = document.getElementById('installModsBtn');
+            installBtn.disabled = true;
+            installBtn.textContent = 'Installation...';
+            
+            log('Début de l\'installation des mods...');
+            
+            try {
+                if (window.LauncherAPI && window.LauncherAPI.installMods) {
+                    const result = await window.LauncherAPI.installMods();
+                    if (result.ok) {
+                        log(`✅ ${result.message}`);
+                        refreshMods();
+                    } else {
+                        log(`❌ Erreur: ${result.error}`);
+                    }
+                } else {
+                    log('❌ API non disponible');
+                }
+            } catch (error) {
+                log(`❌ Erreur: ${error.message}`);
+            }
+            
+            installBtn.disabled = false;
+            installBtn.textContent = 'Installer les Mods';
+        }
+        
+        async function refreshMods() {
+            log('Rafraîchissement de la liste des mods...');
+            
+            try {
+                if (window.LauncherAPI && window.LauncherAPI.getModsList) {
+                    const result = await window.LauncherAPI.getModsList();
+                    const modsList = document.getElementById('modsList');
+                    
+                    if (result.ok) {
+                        if (result.mods.length === 0) {
+                            modsList.innerHTML = '<p style="color: #556677;">Aucun mod installé</p>';
+                        } else {
+                            modsList.innerHTML = result.mods.map(mod => 
+                                `<div class="mod-item">📦 ${mod.name} (${(mod.size / 1024 / 1024).toFixed(2)} MB)</div>`
+                            ).join('');
+                        }
+                        log(`✅ ${result.mods.length} mod(s) trouvé(s)`);
+                    } else {
+                        log(`❌ Erreur: ${result.error}`);
+                    }
+                } else {
+                    log('❌ API non disponible');
+                }
+            } catch (error) {
+                log(`❌ Erreur: ${error.message}`);
+            }
+        }
+        
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshMods();
+        });
+    </script>
+</body>
+</html>

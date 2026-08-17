@@ -1,6 +1,6 @@
 {
-  "name": "minecraft-forge-launcher",
-  "version": "1.0.1",
+  "name": "domination-world-launcher",
+  "version": "2.0.0",
   "private": true,
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,6 @@
     "dist": "electron-builder --win --publish always"
   },
   "dependencies": {
-    "electron-updater": "^6.3.0",
     "minecraft-launcher-core": "^3.18.2"
   },
   "devDependencies": {
@@ -17,8 +16,8 @@
     "electron-builder": "^24.13.0"
   },
   "build": {
-    "appId": "fr.minecraft.ma.launcher",
-    "productName": "Launcheurs 1.20.1",
+    "appId": "fr.dominationworld.launcher",
+    "productName": "Domination World Launcher",
     "directories": {
       "output": "dist"
     },
@@ -32,11 +31,15 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "artifactName": "${productName}-setup-${version}.${ext}"
