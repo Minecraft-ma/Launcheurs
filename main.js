@@ -298,9 +298,66 @@ if (typeof ipcMain !== 'undefined') {
     const modsFolder = path.join(LAUNCH_ROOT, 'mods');
     if (fs.existsSync(modsFolder)) {
       const mods = fs.readdirSync(modsFolder).filter(file => file.endsWith('.jar'));
-      return { success: true, mods };
+      return { ok: true, mods: mods.map(name => ({ name, size: fs.statSync(path.join(modsFolder, name)).size })) };
     }
-    return { success: true, mods: [] };
+    return { ok: true, mods: [] };
+  });
+
+  ipcMain.handle('deleteMod', async (event, name) => {
+    const modsFolder = path.join(LAUNCH_ROOT, 'mods');
+    const modPath = path.join(modsFolder, name);
+    if (fs.existsSync(modPath)) {
+      fs.unlinkSync(modPath);
+      return { ok: true };
+    }
+    return { ok: false, error: 'Mod non trouvé' };
+  });
+
+  ipcMain.handle('importMods', async (event, paths) => {
+    const modsFolder = path.join(LAUNCH_ROOT, 'mods');
+    if (!fs.existsSync(modsFolder)) {
+      fs.mkdirSync(modsFolder, { recursive: true });
+    }
+    let imported = 0;
+    for (const srcPath of paths) {
+      if (fs.existsSync(srcPath) && srcPath.endsWith('.jar')) {
+        const fileName = path.basename(srcPath);
+        const destPath = path.join(modsFolder, fileName);
+        fs.copyFileSync(srcPath, destPath);
+        imported++;
+      }
+    }
+    return { ok: true, imported };
+  });
+
+  ipcMain.handle('clearMods', async () => {
+    const modsFolder = path.join(LAUNCH_ROOT, 'mods');
+    if (fs.existsSync(modsFolder)) {
+      const files = fs.readdirSync(modsFolder).filter(file => file.endsWith('.jar'));
+      for (const file of files) {
+        fs.unlinkSync(path.join(modsFolder, file));
+      }
+      return { ok: true };
+    }
+    return { ok: true };
+  });
+
+  ipcMain.handle('openModsFolder', async () => {
+    const { shell } = require('electron');
+    const modsFolder = path.join(LAUNCH_ROOT, 'mods');
+    if (!fs.existsSync(modsFolder)) {
+      fs.mkdirSync(modsFolder, { recursive: true });
+    }
+    shell.openPath(modsFolder);
+    return { ok: true };
+  });
+
+  ipcMain.handle('getSystemRam', async () => {
+    return os.totalmem() / 1073741824; // GB
+  });
+
+  ipcMain.handle('getAppVersion', async () => {
+    return { ok: true, version: app.getVersion() };
   });
 
   ipcMain.handle('launchMinecraft', async (event, settings) => {

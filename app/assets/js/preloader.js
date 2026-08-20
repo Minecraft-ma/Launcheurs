@@ -2,11 +2,11 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
     // Window controls
-    minimize: () => ipcRenderer.send('window-minimize'),
-    maximize: () => ipcRenderer.send('window-maximize'),
-    unmaximize: () => ipcRenderer.send('window-unmaximize'),
-    toggleMaximize: () => ipcRenderer.send('window-toggle-maximize'),
-    close: () => ipcRenderer.send('window-close'),
+    windowMinimize: () => ipcRenderer.send('window-minimize'),
+    windowMaximize: () => ipcRenderer.send('window-maximize'),
+    windowUnmaximize: () => ipcRenderer.send('window-unmaximize'),
+    windowToggleMaximize: () => ipcRenderer.send('window-toggle-maximize'),
+    windowClose: () => ipcRenderer.send('window-close'),
     
     // Minecraft launch
     launchMinecraft: (settings) => ipcRenderer.invoke('launchMinecraft', settings),
@@ -31,6 +31,14 @@ contextBridge.exposeInMainWorld('LauncherAPI', {
     // Mods
     installMods: () => ipcRenderer.invoke('installMods'),
     getModsList: () => ipcRenderer.invoke('getModsList'),
+    deleteMod: (name) => ipcRenderer.invoke('deleteMod', name),
+    importMods: (paths) => ipcRenderer.invoke('importMods', paths),
+    clearMods: () => ipcRenderer.invoke('clearMods'),
+    openModsFolder: () => ipcRenderer.invoke('openModsFolder'),
+    
+    // System
+    getSystemRam: () => ipcRenderer.invoke('getSystemRam'),
+    getAppVersion: () => ipcRenderer.invoke('getAppVersion'),
     
     // Remove listeners
     removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel)

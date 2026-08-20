@@ -785,7 +785,14 @@
 
   <script>
     // ===== UTILITIES =====
-    const api = window.launcherApi;
+    const api = {
+      ...window.electron,
+      ...window.LauncherAPI,
+      // Compatibilité
+      getModsList: window.LauncherAPI?.getModsList,
+      getDistributionIndex: window.LauncherAPI?.getDistributionIndex,
+      installMods: window.LauncherAPI?.installMods
+    };
 
     function escapeHtml(text) {
       const div = document.createElement('div');
